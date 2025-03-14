@@ -12,6 +12,7 @@ export default class HomeView {
 
   // HTML ids and classes
   static readonly VIEW_ID = "home"
+  static readonly VIEW_HEADER_ID = "view-header"
   static readonly TITLE_ID = "title"
 
   // Signals
@@ -93,16 +94,25 @@ export default class HomeView {
       await new Promise(resolve => setTimeout(resolve, 500))
 
       container.innerHTML = ""
+
+      const viewHeader = uiComponent({
+        id: HomeView.VIEW_HEADER_ID,
+        styles: {
+          background: "#ffaaaaa"
+        }
+      })
+
       const title = uiComponent({
         type: Html.H1,
         text: currentCategoryName,
         id: "title"
       })
+      viewHeader.appendChild(title)
 
-      container.appendChild(title)
       const bar = HomeView.renderProjectBar(projects, currentProjectName, currentCategoryName)
-      container.appendChild(bar)
+      viewHeader.appendChild(bar)
 
+      container.appendChild(viewHeader)
       this.render(container, currentProjectName, currentCategoryName)
 
       // appear animation

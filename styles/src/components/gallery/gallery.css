@@ -42,6 +42,11 @@ div.gallery.mobile ul#image-list li {
   display: block;
 }
 
+:root[data-display="mobile"] div.gallery ul#image-list li div.canvas,
+:root[data-display="mobile"] div.gallery ul#image-list li div.canvas img {
+  border-radius: 1.35rem;
+}
+
 div.gallery ul#image-list li div.canvas {
   filter: brightness(0.95) saturate(0.9);
 }
