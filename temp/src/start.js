@@ -921,14 +921,21 @@
                 container.style.opacity = "0";
                 await new Promise(resolve => setTimeout(resolve, 500));
                 container.innerHTML = "";
+                const viewHeader = uiComponent({
+                    id: HomeView.VIEW_HEADER_ID,
+                    styles: {
+                        background: "#ffaaaaa"
+                    }
+                });
                 const title = uiComponent({
                     type: Html.H1,
                     text: currentCategoryName,
                     id: "title"
                 });
-                container.appendChild(title);
+                viewHeader.appendChild(title);
                 const bar = HomeView.renderProjectBar(projects, currentProjectName, currentCategoryName);
-                container.appendChild(bar);
+                viewHeader.appendChild(bar);
+                container.appendChild(viewHeader);
                 this.render(container, currentProjectName, currentCategoryName);
                 // appear animation
                 container.style.opacity = "1";
@@ -1006,6 +1013,7 @@
     }
     // HTML ids and classes
     HomeView.VIEW_ID = "home";
+    HomeView.VIEW_HEADER_ID = "view-header";
     HomeView.TITLE_ID = "title";
     // Signals
     HomeView.PROJECT_SELECTED_SIGNAL = setSignal();
