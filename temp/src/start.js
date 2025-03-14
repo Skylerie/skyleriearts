@@ -922,9 +922,13 @@
                 await new Promise(resolve => setTimeout(resolve, 500));
                 container.innerHTML = "";
                 const viewHeader = uiComponent({
-                    id: HomeView.VIEW_HEADER_ID,
+                    id: HomeView.VIEW_HEADER_ID
+                });
+                const titleBar = uiComponent({
+                    classes: [BubbleUI.BoxRow, BubbleUI.BoxXBetween, BubbleUI.BoxYCenter],
+                    id: HomeView.TITLE_BAR_ID,
                     styles: {
-                        background: "#ffaaaaa"
+                        width: "100%"
                     }
                 });
                 const title = uiComponent({
@@ -932,7 +936,20 @@
                     text: currentCategoryName,
                     id: "title"
                 });
-                viewHeader.appendChild(title);
+                titleBar.appendChild(title);
+                const icon = uiComponent({
+                    type: Html.Img,
+                    attributes: {
+                        src: getConfiguration("path")["icons"] + "/menu-icon.svg"
+                    }
+                });
+                titleBar.appendChild(icon);
+                setDomEvents(icon, {
+                    click: () => {
+                        Header.toggle();
+                    }
+                });
+                viewHeader.appendChild(titleBar);
                 const bar = HomeView.renderProjectBar(projects, currentProjectName, currentCategoryName);
                 viewHeader.appendChild(bar);
                 container.appendChild(viewHeader);
@@ -1014,6 +1031,7 @@
     // HTML ids and classes
     HomeView.VIEW_ID = "home";
     HomeView.VIEW_HEADER_ID = "view-header";
+    HomeView.TITLE_BAR_ID = "title-bar";
     HomeView.TITLE_ID = "title";
     // Signals
     HomeView.PROJECT_SELECTED_SIGNAL = setSignal();
