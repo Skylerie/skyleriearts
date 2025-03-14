@@ -32,13 +32,20 @@ view#home div#gallery-container div#view-header {
   background: #dcd8d0;
 }
 
+view#home div#gallery-container div#view-header div#title-bar {
+  padding-top: 2rem;
+  padding-right: 2rem;
+  padding-left: 2rem;
+  padding-bottom: 0;
+}
+
 view#home div#gallery-container div#view-header h1#title {
   font-family: "just another hand";
   font-size: 7rem;
   color: #9a8e75;
   width: 100%;
   text-align: center;
-  padding-top: 2rem;
+  padding: 0;
 }
 
 :root[data-display="mobile"]
@@ -47,7 +54,6 @@ view#home div#gallery-container div#view-header h1#title {
   div#view-header
   h1#title {
   font-size: 3.5rem;
-  padding-left: 2rem;
   text-align: left;
   margin: 0;
 }

@@ -2,7 +2,8 @@ import { ImageGallery } from "../../components/gallery/gallery.js";
 import { Header } from "../../components/header/header.js";
 import { Visualizer, VisualizerProcessor } from "../../components/visualizer/visualizer.js";
 import { BubbleUI } from "../../lib/bubble.js";
-import { setDomDataset, uiComponent } from "../../lib/dom.js";
+import { getConfiguration } from "../../lib/configuration.js";
+import { setDomDataset, setDomEvents, uiComponent } from "../../lib/dom.js";
 import { Html } from "../../lib/html.js";
 import { connectToSignal, emitSignal, setSignal } from "../../lib/signals.js";
 import ImageService from "../../services/image.js";
@@ -13,6 +14,7 @@ export default class HomeView {
   // HTML ids and classes
   static readonly VIEW_ID = "home"
   static readonly VIEW_HEADER_ID = "view-header"
+  static readonly TITLE_BAR_ID = "title-bar"
   static readonly TITLE_ID = "title"
 
   // Signals
@@ -96,9 +98,14 @@ export default class HomeView {
       container.innerHTML = ""
 
       const viewHeader = uiComponent({
-        id: HomeView.VIEW_HEADER_ID,
+        id: HomeView.VIEW_HEADER_ID
+      })
+
+      const titleBar = uiComponent({
+        classes: [BubbleUI.BoxRow, BubbleUI.BoxXBetween, BubbleUI.BoxYCenter],
+        id: HomeView.TITLE_BAR_ID,
         styles: {
-          background: "#ffaaaaa"
+          width: "100%"
         }
       })
 
@@ -107,7 +114,23 @@ export default class HomeView {
         text: currentCategoryName,
         id: "title"
       })
-      viewHeader.appendChild(title)
+      titleBar.appendChild(title)
+
+      const icon = uiComponent({
+        type: Html.Img,
+        attributes: {
+          src: getConfiguration("path")["icons"] + "/menu-icon.svg"
+        }
+      })
+      titleBar.appendChild(icon)
+
+      setDomEvents(icon, {
+        click: () => {
+          Header.toggle()
+        }
+      })
+
+      viewHeader.appendChild(titleBar)
 
       const bar = HomeView.renderProjectBar(projects, currentProjectName, currentCategoryName)
       viewHeader.appendChild(bar)
