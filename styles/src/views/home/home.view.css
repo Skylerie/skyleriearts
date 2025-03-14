@@ -33,9 +33,15 @@ view#home div#gallery-container h1#title {
   padding-top: 2rem;
 }
 
+:root[data-display=mobile] view#home div#gallery-container h1#title {
+  font-size: 5rem;
+  margin: 0;
+}
+
 :root[data-theme="dark"] view#home div#gallery-container h1#title {
   color: #c2c0bf;
 }
+
 view#home div#gallery-container div#project-bar button {
   background-color: #d9d2c3;
   color: #9a8e75;
@@ -50,20 +56,12 @@ view#home div#gallery-container div#project-bar button.selected {
   margin: 10px;
 }
 
-:root[data-theme="dark"]
-  view#home
-  div#gallery-container
-  div#project-bar
-  button.selected {
+:root[data-theme="dark"] view#home div#gallery-container div#project-bar button.selected {
   background-color: var(--accent-color);
   color: #573933;
 }
 
-:root[data-theme="dark"]
-  view#home
-  div#gallery-container
-  div#project-bar
-  button {
+:root[data-theme="dark"] view#home div#gallery-container div#project-bar button {
   background-color: #26211e;
   color: #c2c0bf;
   font-size: 1.2rem;

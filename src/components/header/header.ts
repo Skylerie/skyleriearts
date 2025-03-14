@@ -1,3 +1,4 @@
+import { isMediumDevice, isMobile, isSmallDevice } from "../../lib/browser.js"
 import { BubbleUI } from "../../lib/bubble.js"
 import { getConfiguration } from "../../lib/configuration.js"
 import { setDomEvents, uiComponent } from "../../lib/dom.js"
@@ -14,6 +15,8 @@ export class Header {
   private static readonly TAG_MENU_ID = "tag-menu"
   private static readonly TAG_BUTTON_CLASS = "tag-button"
 
+  private static toggleEnabled = false
+
   static readonly OPTION_SELECTED_SIGNAL = setSignal()
 
   /**
@@ -22,6 +25,10 @@ export class Header {
    * @returns The composed HTML element
    */
   static render(options: Set<string>): HTMLElement {
+
+    if (isMobile() || isSmallDevice() || isMediumDevice()) {
+      this.toggleEnabled = true
+    }
 
     disconnectSignal(this.OPTION_SELECTED_SIGNAL)
 
@@ -85,12 +92,13 @@ export class Header {
       setDomEvents(button, {
         click: (e) => {
 
-          if ((e.target as HTMLElement).classList.contains("selected")) return
+          if (!this.toggleEnabled && (e.target as HTMLElement).classList.contains("selected")) return
 
           const buttons = document.querySelectorAll(`#${Header.HEADER_ID} .${Header.TAG_BUTTON_CLASS}`)
           buttons.forEach(b => b.classList.remove("selected"))
           button.classList.add("selected")
 
+          Header.toggle()
           emitSignal(Header.OPTION_SELECTED_SIGNAL, option)
         }
       })
@@ -98,5 +106,14 @@ export class Header {
     })
 
     return menu
+  }
+
+  static toggle() {
+
+    if (!this.toggleEnabled)
+      return
+
+    document.getElementById(this.HEADER_ID).classList.toggle("hide")
+
   }
 } 
