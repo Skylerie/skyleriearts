@@ -723,6 +723,7 @@
     const BUTTON_BACK_ID = "visualizer-back";
     const BUTTON_NEXT_ID = "visualizer-next";
     const IMAGE_ID = "visualizer-image";
+    const NAME_ID = "visualizer-name";
     const INFO_TEXT_ID = "visualizer-info-text";
     /**
      * This class is responsible of processing
@@ -827,11 +828,22 @@
                     this.render(processor);
                 }
             });
+            const imageCanvas = uiComponent({
+                type: Html.Div,
+                classes: [BubbleUI.BoxColumn, BubbleUI.BoxYCenter, BubbleUI.BoxXCenter]
+            });
             const image = uiComponent({
                 type: Html.Img,
                 id: IMAGE_ID,
                 attributes: { src: processor.getCurrentImage()?.path || "" },
             });
+            imageCanvas.appendChild(image);
+            const name = uiComponent({
+                type: Html.H1,
+                id: NAME_ID,
+                text: processor.getCurrentImage()?.name
+            });
+            imageCanvas.appendChild(name);
             const infoText = uiComponent({
                 type: Html.P,
                 id: INFO_TEXT_ID,
@@ -839,7 +851,7 @@
                 classes: ["info-text"],
             });
             visualizer.appendChild(buttonBack);
-            visualizer.appendChild(image);
+            visualizer.appendChild(imageCanvas);
             visualizer.appendChild(buttonNext);
             visualizer.appendChild(infoText);
             return visualizer;
@@ -851,6 +863,8 @@
             const image = document.getElementById(IMAGE_ID);
             image.style.display = "flex";
             image.setAttribute("src", processor.getCurrentImage()?.path || "");
+            const name = document.getElementById(NAME_ID);
+            name.innerText = processor.getCurrentImage().name || "";
             return visualizer;
         }
         static show() {
