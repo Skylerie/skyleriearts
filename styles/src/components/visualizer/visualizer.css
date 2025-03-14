@@ -20,6 +20,12 @@
   filter: drop-shadow(0 0.5rem 1rem rgba(0, 0, 0, 0.25));
 }
 
+#visualizer #visualizer-name {
+  color: var(--text-color);
+  font-size: 2rem;
+  font-family: "just another hand";
+}
+
 #visualizer #visualizer-back,
 #visualizer #visualizer-next {
   position: absolute;
