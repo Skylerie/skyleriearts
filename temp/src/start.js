@@ -427,6 +427,9 @@
          * @returns The composed HTML element
          */
         static render(options) {
+            if (isMobile() || isSmallDevice() || isMediumDevice()) {
+                this.toggleEnabled = true;
+            }
             disconnectSignal(this.OPTION_SELECTED_SIGNAL);
             let header = uiComponent({
                 type: Html.Div,
@@ -476,11 +479,12 @@
                 });
                 setDomEvents(button, {
                     click: (e) => {
-                        if (e.target.classList.contains("selected"))
+                        if (!this.toggleEnabled && e.target.classList.contains("selected"))
                             return;
                         const buttons = document.querySelectorAll(`#${Header.HEADER_ID} .${Header.TAG_BUTTON_CLASS}`);
                         buttons.forEach(b => b.classList.remove("selected"));
                         button.classList.add("selected");
+                        Header.toggle();
                         emitSignal(Header.OPTION_SELECTED_SIGNAL, option);
                     }
                 });
@@ -488,10 +492,16 @@
             });
             return menu;
         }
+        static toggle() {
+            if (!this.toggleEnabled)
+                return;
+            document.getElementById(this.HEADER_ID).classList.toggle("hide");
+        }
     }
     Header.HEADER_ID = "header";
     Header.TAG_MENU_ID = "tag-menu";
     Header.TAG_BUTTON_CLASS = "tag-button";
+    Header.toggleEnabled = false;
     Header.OPTION_SELECTED_SIGNAL = setSignal();
 
     class BioView {
