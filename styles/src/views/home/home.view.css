@@ -29,7 +29,14 @@ view#home div#gallery-container div#view-header {
 }
 
 :root[data-display="mobile"] view#home div#gallery-container div#view-header {
-  background: #dcd8d0;
+  background: #dad6ce;
+}
+
+:root[data-theme="dark"][data-display="mobile"]
+  view#home
+  div#gallery-container
+  div#view-header {
+  background: var(--surface-2);
 }
 
 view#home div#gallery-container div#view-header div#title-bar {
@@ -42,7 +49,7 @@ view#home div#gallery-container div#view-header div#title-bar {
 view#home div#gallery-container div#view-header h1#title {
   font-family: "just another hand";
   font-size: 7rem;
-  color: #9a8e75;
+  color: var(--accent-color);
   width: 100%;
   text-align: center;
   padding: 0;
@@ -63,7 +70,7 @@ view#home div#gallery-container div#view-header h1#title {
   div#gallery-container
   div#view-header
   h1#title {
-  color: #c2c0bf;
+  color: var(--text-color);
 }
 
 :root[data-display="mobile"]
@@ -79,8 +86,8 @@ view#home div#gallery-container div#view-header h1#title {
 }
 
 view#home div#gallery-container div#view-header div#project-bar button {
-  background-color: #d9d2c3;
-  color: #9a8e75;
+  background-color: var(--on-surface-1);
+  color: var(--text-color);
   font-size: 1.2rem;
   margin: 10px;
 }
@@ -90,30 +97,8 @@ view#home
   div#view-header
   div#project-bar
   button.selected {
-  background-color: #9a8e75;
-  color: #e8e0d3;
-  font-size: 1.2rem;
-  margin: 10px;
-}
-
-:root[data-theme="dark"]
-  view#home
-  div#gallery-container
-  div#view-header
-  div#project-bar
-  button.selected {
   background-color: var(--accent-color);
-  color: #573933;
-}
-
-:root[data-theme="dark"]
-  view#home
-  div#gallery-container
-  div#view-header
-  div#project-bar
-  button {
-  background-color: #26211e;
-  color: #c2c0bf;
+  color: var(--on-accent-color);
   font-size: 1.2rem;
   margin: 10px;
 }

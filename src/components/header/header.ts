@@ -4,6 +4,7 @@ import { getConfiguration } from "../../lib/configuration.js"
 import { setDomEvents, uiComponent } from "../../lib/dom.js"
 import { Html } from "../../lib/html.js"
 import { disconnectSignal, emitSignal, setSignal } from "../../lib/signals.js"
+import { Theme } from "../../services/theme.js"
 
 /**
  * This class represents the header of the application
@@ -47,7 +48,8 @@ export class Header {
     })
 
     setDomEvents(profilePicture, {
-      click: () => window.open("/#/bio", "_self")
+      click: () => { Theme.toggle() }
+      //      click: () => window.open("/#/bio", "_self")
     })
 
     const title = uiComponent({

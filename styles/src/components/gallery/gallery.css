@@ -52,6 +52,10 @@ div.gallery ul#image-list li div.canvas {
   background: #f2ede4;
 }
 
+:root[data-theme="dark"] div.gallery ul#image-list li div.canvas {
+  background: rgba(0, 0, 0, 0.15);
+}
+
 div.gallery ul#image-list li div.canvas,
 div.gallery ul#image-list li div.canvas img {
   height: 18rem;

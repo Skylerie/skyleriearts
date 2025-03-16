@@ -1,5 +1,7 @@
+import { prefersDarkMode } from "./lib/browser.js";
 import { getConfiguration, loadConfiguration } from "./lib/configuration.js";
 import { Display } from "./lib/display.js";
+import { setDomDataset } from "./lib/dom.js";
 import { loadIcons } from "./lib/icons.js";
 import { setNotFoundRoute, setRoute, showRoute } from "./lib/router.js";
 import ImageService from "./services/image.js";
@@ -34,6 +36,7 @@ window.onresize = async function() {
 
 /** Start the web app     */
 async function start() {
+
   setRoute("", HomeView.show)
   setRoute("bio", BioView.show)
 
