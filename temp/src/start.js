@@ -445,6 +445,17 @@
         }
     }
 
+    class Theme {
+        static toggle() {
+            if (document.documentElement.dataset.theme == "dark") {
+                setDomDataset(document.documentElement, { theme: "light" });
+            }
+            else {
+                setDomDataset(document.documentElement, { theme: "dark" });
+            }
+        }
+    }
+
     /**
      * This class represents the header of the application
      * it is static because only one is needed across th app.
@@ -473,7 +484,8 @@
                 },
             });
             setDomEvents(profilePicture, {
-                click: () => window.open("/#/bio", "_self")
+                click: () => { Theme.toggle(); }
+                //      click: () => window.open("/#/bio", "_self")
             });
             const title = uiComponent({
                 type: Html.H1,
