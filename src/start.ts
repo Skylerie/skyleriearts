@@ -1,6 +1,5 @@
-import { isSmallDevice, isMobile, isMediumDevice } from "./lib/browser.js";
 import { getConfiguration, loadConfiguration } from "./lib/configuration.js";
-import { setDomDataset } from "./lib/dom.js";
+import { Display } from "./lib/display.js";
 import { loadIcons } from "./lib/icons.js";
 import { setNotFoundRoute, setRoute, showRoute } from "./lib/router.js";
 import ImageService from "./services/image.js";
@@ -20,17 +19,17 @@ window.addEventListener("hashchange", start);
  */
 window.onload = async function() {
 
-  checkDisplayType()
-
   await loadConfiguration("gtdf.config.json")
+  Display.checkType()
+
   await loadIcons("material", `${getConfiguration("path")["icons"]}/materialicons.json`)
-  await loadIcons(" social", `${getConfiguration("path")["icons"]}/socialicons.json`)
+  await loadIcons("social", `${getConfiguration("path")["icons"]}/socialicons.json`)
   await ImageService.load()
   await start()
 }
 
 window.onresize = async function() {
-  checkDisplayType()
+  Display.checkType()
 }
 
 /** Start the web app     */
@@ -41,51 +40,6 @@ async function start() {
   setNotFoundRoute(showErrorView)
   showRoute(window.location.hash.slice(1).toLowerCase(), document.body)
 }
-
-
-function checkDisplayType() {
-
-  if (isMobile() || isSmallDevice() || isMediumDevice()) {
-    setDomDataset(document.documentElement, {
-      display: "mobile"
-    })
-    return
-  }
-
-  setDomDataset(document.documentElement, {
-    display: "desktop"
-  })
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

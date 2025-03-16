@@ -1,8 +1,10 @@
 import { ImageGallery } from "../../components/gallery/gallery.js";
 import { Header } from "../../components/header/header.js";
 import { Visualizer, VisualizerProcessor } from "../../components/visualizer/visualizer.js";
+import { isMediumDevice, isMobile, isSmallDevice } from "../../lib/browser.js";
 import { BubbleUI } from "../../lib/bubble.js";
 import { getConfiguration } from "../../lib/configuration.js";
+import { Display } from "../../lib/display.js";
 import { setDomDataset, setDomEvents, uiComponent } from "../../lib/dom.js";
 import { Html } from "../../lib/html.js";
 import { connectToSignal, emitSignal, setSignal } from "../../lib/signals.js";
@@ -91,10 +93,13 @@ export default class HomeView {
 
     if (categoryChanged) {
 
-      // Disappear animation
-      container.style.opacity = "0";
-      await new Promise(resolve => setTimeout(resolve, 500))
+      if (!Display.isMobile()) {
 
+        // Disappear animation
+        container.style.opacity = "0";
+        await new Promise(resolve => setTimeout(resolve, 500))
+
+      }
       container.innerHTML = ""
 
       const viewHeader = uiComponent({
@@ -116,20 +121,19 @@ export default class HomeView {
       })
       titleBar.appendChild(title)
 
-      const icon = uiComponent({
-        type: Html.Img,
-        attributes: {
-          src: getConfiguration("path")["icons"] + "/menu-icon.svg"
-        }
-      })
-      titleBar.appendChild(icon)
+      if (Display.isMobile()) {
+        const icon = uiComponent({
+          type: Html.Img,
+          attributes: {
+            src: getConfiguration("path")["icons"] + "/menu-icon.svg"
+          }
+        })
+        titleBar.appendChild(icon)
 
-      setDomEvents(icon, {
-        click: () => {
-          Header.toggle()
-        }
-      })
-
+        setDomEvents(icon, {
+          click: () => { Header.toggle() }
+        })
+      }
       viewHeader.appendChild(titleBar)
 
       const bar = HomeView.renderProjectBar(projects, currentProjectName, currentCategoryName)

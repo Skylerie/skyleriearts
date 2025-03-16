@@ -70,7 +70,7 @@ export class Header {
   /**
    * Draw the options of the menu
    * @param options The options to show
-   * @param selected The selected option
+   * @param selected The selected option 
    * @returns The composed HTML element 
    */
   static drawOptions(options: Set<string>, selected: string): HTMLElement {
