@@ -749,6 +749,7 @@
     ImageGallery.IMAGE_SELECTED_SIGNAL = setSignal();
 
     const VISUALIZER_ID = "visualizer";
+    const VISUALIZER_CANVAS_ID = "canvas";
     const BUTTON_BACK_ID = "visualizer-back";
     const BUTTON_NEXT_ID = "visualizer-next";
     const IMAGE_ID = "visualizer-image";
@@ -832,15 +833,6 @@
                 id: VISUALIZER_ID,
                 classes: [BubbleUI.BoxRow, BubbleUI.BoxCenter],
             });
-            setDomEvents(visualizer, {
-                click: (event) => {
-                    //if the click is not on the image, close the visualizer
-                    if (event.target != visualizer)
-                        return;
-                    event.stopPropagation();
-                    visualizer.style.display = "none";
-                }
-            });
             const buttonBack = getIcon("material", "back", "48px", "var(--text-color)");
             buttonBack.id = BUTTON_BACK_ID;
             setDomEvents(buttonBack, {
@@ -859,6 +851,7 @@
             });
             const imageCanvas = uiComponent({
                 type: Html.Div,
+                id: VISUALIZER_CANVAS_ID,
                 classes: [BubbleUI.BoxColumn, BubbleUI.BoxYCenter, BubbleUI.BoxXCenter]
             });
             const image = uiComponent({
@@ -870,7 +863,8 @@
             const name = uiComponent({
                 type: Html.H1,
                 id: NAME_ID,
-                text: processor.getCurrentImage()?.name
+                text: processor.getCurrentImage()?.name,
+                selectable: false
             });
             imageCanvas.appendChild(name);
             const infoText = uiComponent({
@@ -878,6 +872,16 @@
                 id: INFO_TEXT_ID,
                 text: "Touch outside the image to close the visualizer.",
                 classes: ["info-text"],
+                selectable: false
+            });
+            setDomEvents(visualizer, {
+                click: (event) => {
+                    //if the click is not on the image, close the visualizer
+                    if (event.target != visualizer && event.target != imageCanvas)
+                        return;
+                    event.stopPropagation();
+                    visualizer.style.display = "none";
+                }
             });
             visualizer.appendChild(buttonBack);
             visualizer.appendChild(imageCanvas);
