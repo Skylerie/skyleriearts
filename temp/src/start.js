@@ -1,6 +1,39 @@
 (function () {
     'use strict';
 
+    /**
+    * The id of the configuration used in the LocalStorage API
+    * NOTE: Change this value with your app name.
+    */
+    const configurationId = "skyleriearts-website-config";
+    /**
+     * Load a JSON file as the configuration of the app
+     * @param path The file path
+     */
+    async function loadConfiguration(path) {
+        const loadedConfiguration = await fetch(path).then(res => res.json());
+        localStorage[configurationId] = JSON.stringify(loadedConfiguration);
+    }
+    /**
+     * Set a configuration parameter
+     * @param id The configuration parameter id
+     * @param value The value to set
+     */
+    function setConfiguration(id, value) {
+        const configuration = JSON.parse(localStorage[configurationId] || "{}");
+        configuration[id] = value;
+        localStorage.setItem(configurationId, JSON.stringify(configuration));
+    }
+    /**
+     * Get configuration value
+     * @param id The parameter id
+     * @returns The parameter value
+     */
+    function getConfiguration(id) {
+        const configuration = JSON.parse(localStorage[configurationId]);
+        return configuration[id];
+    }
+
     const SMALL_DEVICE_WIDTH = 760;
     const MEDIUM_DEVICE_WIDTH = 1024;
     /**
@@ -27,29 +60,6 @@
             navigator.userAgent.match(/iPhone|iPad|iPod/i) ||
             navigator.userAgent.match(/Opera Mini/i) ||
             navigator.userAgent.match(/IEMobile/i));
-    }
-
-    /**
-    * The id of the configuration used in the LocalStorage API
-    * NOTE: Change this value with your app name.
-    */
-    const configurationId = "skyleriearts-website-config";
-    /**
-     * Load a JSON file as the configuration of the app
-     * @param path The file path
-     */
-    async function loadConfiguration(path) {
-        const loadedConfiguration = await fetch(path).then(res => res.json());
-        localStorage[configurationId] = JSON.stringify(loadedConfiguration);
-    }
-    /**
-     * Get configuration value
-     * @param id The parameter id
-     * @returns The parameter value
-     */
-    function getConfiguration(id) {
-        const configuration = JSON.parse(localStorage[configurationId]);
-        return configuration[id];
     }
 
     /** Create a DOM element */
@@ -107,6 +117,25 @@
         for (const key in dataset)
             element.dataset[key] = dataset[key];
         return element;
+    }
+
+    class Display {
+        static checkType() {
+            if (isMobile() || isSmallDevice() || isMediumDevice()) {
+                setDomDataset(document.documentElement, {
+                    display: "mobile"
+                });
+                setConfiguration("display", "mobile");
+                return;
+            }
+            setDomDataset(document.documentElement, {
+                display: "desktop"
+            });
+            setConfiguration("display", "desktop");
+        }
+        static isMobile() {
+            return "mobile" == getConfiguration("display");
+        }
     }
 
     const icons = new Map();
@@ -931,9 +960,11 @@
             const projectChanged = container.dataset.project != currentProjectName;
             const categoryChanged = container.dataset.category != currentCategoryName;
             if (categoryChanged) {
-                // Disappear animation
-                container.style.opacity = "0";
-                await new Promise(resolve => setTimeout(resolve, 500));
+                if (!Display.isMobile()) {
+                    // Disappear animation
+                    container.style.opacity = "0";
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
                 container.innerHTML = "";
                 const viewHeader = uiComponent({
                     id: HomeView.VIEW_HEADER_ID
@@ -951,18 +982,18 @@
                     id: "title"
                 });
                 titleBar.appendChild(title);
-                const icon = uiComponent({
-                    type: Html.Img,
-                    attributes: {
-                        src: getConfiguration("path")["icons"] + "/menu-icon.svg"
-                    }
-                });
-                titleBar.appendChild(icon);
-                setDomEvents(icon, {
-                    click: () => {
-                        Header.toggle();
-                    }
-                });
+                if (Display.isMobile()) {
+                    const icon = uiComponent({
+                        type: Html.Img,
+                        attributes: {
+                            src: getConfiguration("path")["icons"] + "/menu-icon.svg"
+                        }
+                    });
+                    titleBar.appendChild(icon);
+                    setDomEvents(icon, {
+                        click: () => { Header.toggle(); }
+                    });
+                }
                 viewHeader.appendChild(titleBar);
                 const bar = HomeView.renderProjectBar(projects, currentProjectName, currentCategoryName);
                 viewHeader.appendChild(bar);
@@ -1062,15 +1093,15 @@
      * the app state to show
      */
     window.onload = async function () {
-        checkDisplayType();
         await loadConfiguration("gtdf.config.json");
+        Display.checkType();
         await loadIcons("material", `${getConfiguration("path")["icons"]}/materialicons.json`);
-        await loadIcons(" social", `${getConfiguration("path")["icons"]}/socialicons.json`);
+        await loadIcons("social", `${getConfiguration("path")["icons"]}/socialicons.json`);
         await ImageService.load();
         await start();
     };
     window.onresize = async function () {
-        checkDisplayType();
+        Display.checkType();
     };
     /** Start the web app     */
     async function start() {
@@ -1078,17 +1109,6 @@
         setRoute("bio", BioView.show);
         setNotFoundRoute(showErrorView);
         showRoute(window.location.hash.slice(1).toLowerCase(), document.body);
-    }
-    function checkDisplayType() {
-        if (isMobile() || isSmallDevice() || isMediumDevice()) {
-            setDomDataset(document.documentElement, {
-                display: "mobile"
-            });
-            return;
-        }
-        setDomDataset(document.documentElement, {
-            display: "desktop"
-        });
     }
 
 })();
