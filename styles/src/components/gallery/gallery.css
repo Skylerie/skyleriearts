@@ -3,7 +3,7 @@ div.gallery {
   padding-top: 2rem;
 }
 
-div.gallery.mobile {
+:root[data-display=mobile] .gallery {
   padding-top: 1rem;
 }
 
@@ -44,17 +44,40 @@ div.gallery.mobile ul#image-list li {
 
 :root[data-display="mobile"] div.gallery ul#image-list li div.canvas,
 :root[data-display="mobile"] div.gallery ul#image-list li div.canvas img {
+  min-height: 20rem;
   border-radius: 1.35rem;
 }
 
 div.gallery ul#image-list li div.canvas {
   filter: brightness(0.95) saturate(0.9);
-  background: #f2ede4;
+
+  --bg: #f2ede4;
+  --loader-color: rgba(255, 255, 255, 0.15);
+
+  background: linear-gradient(0.25turn, transparent, var(--loader-color), transparent),
+    linear-gradient(var(--bg), var(--bg));
+
+  background-repeat: no-repeat;
+  background-position: -315px 0, 0 0, 0px 190px, 50px 195px;
+
+  animation: loading 1.5s infinite;
+}
+
+div.gallery ul#image-list li div.canvas.loaded {
+  animation: none;
+}
+
+@keyframes loading {
+  to {
+    background-position: 315px 0, 0 0, 0 190px, 50px 195px;
+  }
 }
 
 :root[data-theme="dark"] div.gallery ul#image-list li div.canvas {
-  background: rgba(0, 0, 0, 0.15);
+  --bg: rgba(0, 0, 0, 0.10);
+  --loader-color: rgba(255, 255, 255, 0.025)
 }
+
 
 div.gallery ul#image-list li div.canvas,
 div.gallery ul#image-list li div.canvas img {
@@ -65,14 +88,20 @@ div.gallery ul#image-list li div.canvas img {
   transition: var(--animation-fast) ease-in-out;
 }
 
-div.gallery.mobile ul#image-list li div.canvas,
-div.gallery.mobile ul#image-list li div.canvas img {
+:root[data-display=mobile] div.gallery ul#image-list li div.canvas,
+:root[data-display=mobile] div.gallery ul#image-list li div.canvas img {
   height: auto;
   width: 100%;
 }
 
 div.gallery ul#image-list li div.canvas img {
+  opacity: 0;
   width: 100%;
+}
+
+div.gallery ul#image-list div.canvas.loaded img {
+  transition: opacity .35s;
+  opacity: 1;
 }
 
 div.gallery ul#image-list li div.canvas:hover {

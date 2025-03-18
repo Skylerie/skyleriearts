@@ -27,9 +27,7 @@ export class Header {
    */
   static render(options: Set<string>): HTMLElement {
 
-    if (isMobile() || isSmallDevice() || isMediumDevice()) {
-      this.toggleEnabled = true
-    }
+    this.checkIfToggleEnabled()
 
     disconnectSignal(this.OPTION_SELECTED_SIGNAL)
 
@@ -49,7 +47,6 @@ export class Header {
 
     setDomEvents(profilePicture, {
       click: () => { Theme.toggle() }
-      //      click: () => window.open("/#/bio", "_self")
     })
 
     const title = uiComponent({
@@ -112,10 +109,22 @@ export class Header {
 
   static toggle() {
 
+    this.checkIfToggleEnabled()
+
     if (!this.toggleEnabled)
       return
 
     document.getElementById(this.HEADER_ID).classList.toggle("hide")
 
   }
-} 
+
+  static checkIfToggleEnabled() {
+    if (isMobile() || isSmallDevice() || isMediumDevice()) {
+      this.toggleEnabled = true
+      return
+    }
+
+    this.toggleEnabled = false
+  }
+}
+

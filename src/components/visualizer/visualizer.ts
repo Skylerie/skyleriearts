@@ -123,7 +123,10 @@ export class Visualizer {
     const image = uiComponent({
       type: Html.Img,
       id: IMAGE_ID,
-      attributes: { src: processor.getCurrentImage()?.path || "" },
+      attributes: {
+        src: processor.getCurrentImage()?.path || "",
+        loading: "lazy"
+      },
     })
     imageCanvas.appendChild(image)
 
@@ -138,7 +141,7 @@ export class Visualizer {
     const infoText = uiComponent({
       type: Html.P,
       id: INFO_TEXT_ID,
-      text: "Touch outside the image to close the visualizer.",
+      text: "Touch to close the visualizer.",
       classes: ["info-text"],
       selectable: false
     })
@@ -147,7 +150,7 @@ export class Visualizer {
       click: (event) => {
 
         //if the click is not on the image, close the visualizer
-        if (event.target != visualizer && event.target != imageCanvas) return
+        if (event.target != visualizer && event.target != image && event.target != imageCanvas) return
 
         event.stopPropagation()
         visualizer.style.display = "none";

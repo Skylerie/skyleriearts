@@ -1,7 +1,6 @@
 import { ImageGallery } from "../../components/gallery/gallery.js";
 import { Header } from "../../components/header/header.js";
 import { Visualizer, VisualizerProcessor } from "../../components/visualizer/visualizer.js";
-import { isMediumDevice, isMobile, isSmallDevice } from "../../lib/browser.js";
 import { BubbleUI } from "../../lib/bubble.js";
 import { getConfiguration } from "../../lib/configuration.js";
 import { Display } from "../../lib/display.js";
@@ -55,7 +54,8 @@ export default class HomeView {
     view.appendChild(visualizer)
     container.appendChild(view)
 
-    emitSignal(Header.OPTION_SELECTED_SIGNAL, selectedCategory)
+    if (Display.isMobile() == false)
+      emitSignal(Header.OPTION_SELECTED_SIGNAL, selectedCategory)
   }
 
   /**

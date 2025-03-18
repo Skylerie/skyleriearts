@@ -1,5 +1,5 @@
 import { BubbleUI } from "../../lib/bubble.js";
-import { setDomEvents, uiComponent } from "../../lib/dom.js";
+import { setDomClasses, setDomEvents, uiComponent } from "../../lib/dom.js";
 import { Html } from "../../lib/html.js";
 import { isSmallDevice } from "../../lib/browser.js";
 import { emitSignal, setSignal } from "../../lib/signals.js";
@@ -115,7 +115,9 @@ export class ImageGallery {
         loading: "lazy",
         background: "#fff",
       },
-    })
+    }) as HTMLImageElement
+
+    imageComponent.onload = () => setDomClasses(canvas, ["loaded"])
 
     setDomEvents(imageComponent, {
       load: () => (imageComponent.style.opacity = "1"),
