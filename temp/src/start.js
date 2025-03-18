@@ -467,9 +467,7 @@
          * @returns The composed HTML element
          */
         static render(options) {
-            if (isMobile() || isSmallDevice() || isMediumDevice()) {
-                this.toggleEnabled = true;
-            }
+            this.checkIfToggleEnabled();
             disconnectSignal(this.OPTION_SELECTED_SIGNAL);
             let header = uiComponent({
                 type: Html.Div,
@@ -485,7 +483,6 @@
             });
             setDomEvents(profilePicture, {
                 click: () => { Theme.toggle(); }
-                //      click: () => window.open("/#/bio", "_self")
             });
             const title = uiComponent({
                 type: Html.H1,
@@ -534,9 +531,17 @@
             return menu;
         }
         static toggle() {
+            this.checkIfToggleEnabled();
             if (!this.toggleEnabled)
                 return;
             document.getElementById(this.HEADER_ID).classList.toggle("hide");
+        }
+        static checkIfToggleEnabled() {
+            if (isMobile() || isSmallDevice() || isMediumDevice()) {
+                this.toggleEnabled = true;
+                return;
+            }
+            this.toggleEnabled = false;
         }
     }
     Header.HEADER_ID = "header";
@@ -748,6 +753,7 @@
                     background: "#fff",
                 },
             });
+            imageComponent.onload = () => setDomClasses(canvas, ["loaded"]);
             setDomEvents(imageComponent, {
                 load: () => (imageComponent.style.opacity = "1"),
             });
@@ -869,7 +875,10 @@
             const image = uiComponent({
                 type: Html.Img,
                 id: IMAGE_ID,
-                attributes: { src: processor.getCurrentImage()?.path || "" },
+                attributes: {
+                    src: processor.getCurrentImage()?.path || "",
+                    loading: "lazy"
+                },
             });
             imageCanvas.appendChild(image);
             const name = uiComponent({
@@ -882,14 +891,14 @@
             const infoText = uiComponent({
                 type: Html.P,
                 id: INFO_TEXT_ID,
-                text: "Touch outside the image to close the visualizer.",
+                text: "Touch to close the visualizer.",
                 classes: ["info-text"],
                 selectable: false
             });
             setDomEvents(visualizer, {
                 click: (event) => {
                     //if the click is not on the image, close the visualizer
-                    if (event.target != visualizer && event.target != imageCanvas)
+                    if (event.target != visualizer && event.target != image && event.target != imageCanvas)
                         return;
                     event.stopPropagation();
                     visualizer.style.display = "none";
@@ -945,7 +954,8 @@
             view.appendChild(galleryContainer);
             view.appendChild(visualizer);
             container.appendChild(view);
-            emitSignal(Header.OPTION_SELECTED_SIGNAL, selectedCategory);
+            if (Display.isMobile() == false)
+                emitSignal(Header.OPTION_SELECTED_SIGNAL, selectedCategory);
         }
         /**
          * Show the projects of the selected tag
