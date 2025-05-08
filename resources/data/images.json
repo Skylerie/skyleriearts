@@ -1,100 +1,86 @@
 {
-	"Oslo scene": {
-		"name": "Oslo scene",
-		"path": "resources/images/uploads/oslo scene.png",
-		"minPath": "resources/images/uploads/oslo scene.png",
-		"projects": ["Anthropomorphic animals"],
-		"categories": ["Concept art"]
-	},
-	"Andoru": {
-		"name": "Andoru",
-		"path": "resources/images/uploads/andoru.png",
-		"minPath": "resources/images/uploads/andoru.png",
-		"projects": ["Anthropomorphic animals"],
-		"categories": ["Concept art"]
-	},
-	"Owl": {
-		"name": "Owl",
-		"path": "resources/images/uploads/owl.png",
-		"minPath": "resources/images/uploads/owl.png",
-		"projects": ["Anthropomorphic animals"],
-		"categories": ["Concept art"]
-	},
-	"Ana amari": {
-		"name": "Ana amari",
-		"path": "resources/images/uploads/ana amari portrait.png",
-		"minPath": "resources/images/uploads/ana amari portrait.png",
-		"projects": ["Anthropomorphic animals"],
-		"categories": ["Concept art"]
-	},
-	"Xionic Ana icon": {
-		"name": "Xionic Ana icon",
-		"path": "resources/images/uploads/Xionix ana icon.png",
-		"minPath": "resources/images/uploads/Xionix ana icon.png",
-		"projects": ["Overwatch"],
-		"categories": ["Concept art"]
-	},
-	"Zephyr headshot overwatch sombra": {
-		"name": "Zephyr headshot overwatch sombra",
-		"path": "resources/images/uploads/zephyr headshot overwatch sombra.png",
-		"minPath": "resources/images/uploads/zephyr headshot overwatch sombra.png",
-		"projects": ["Overwatch"],
-		"categories": ["Concept art"]
-	},
-	"Tas pixelart": {
-		"name": "Tas pixelart",
-		"path": "resources/images/uploads/tas.png",
-		"minPath": "resources/images/uploads/tas.png",
-		"projects": ["Isopets"],
-		"categories": ["Pixel art", "Concept art"]
-	},
-	"Teko pixelart": {
-		"name": "Teko pixelart",
-		"path": "resources/images/uploads/teko.png",
-		"minPath": "resources/images/uploads/teko.png",
-		"projects": ["Isopets"],
-		"categories": ["Pixel art", "Concept art"]
-	},
-	"Soriel pixelart": {
-		"name": "Soriel pixelart",
-		"path": "resources/images/uploads/soriel.png",
-		"minPath": "resources/images/uploads/soriel.png",
-		"projects": ["Isopets"],
-		"categories": ["Pixel art", "Concept art"]
-	},
-	"Cat pixelart": {
-		"name": "Cat pixelart",
-		"path": "resources/images/uploads/cat.png",
-		"minPath": "resources/images/uploads/cat.png",
-		"projects": ["Isopets"],
-		"categories": ["Pixel art", "Concept art"]
-	},
-	"Gomi pixelart": {
-		"name": "Gomi pixelart",
-		"path": "resources/images/uploads/gomi.png",
-		"minPath": "resources/images/uploads/gomi.png",
-		"projects": ["Isopets"],
-		"categories": ["Pixel art", "Concept art"]
-	},
-	"Miles morales study": {
-		"name": "Miles morales study",
-		"path": "resources/images/uploads/miles morales study.png",
-		"minPath": "resources/images/uploads/miles morales study.png",
-		"projects": ["Spiderman"],
-		"categories": ["Comics"]
-	},
-	"Nunna comic page": {
-		"name": "Nunna comic page",
-		"path": "resources/images/uploads/nunna.png",
-		"minPath": "resources/images/uploads/nunna.png",
-		"projects": ["Nunna"],
-		"categories": ["Comics"]
-	},
-	"Val": {
-		"name": "Val",
-		"path": "resources/images/uploads/val.png",
-		"minPath": "resources/images/uploads/val.png",
-		"projects": ["Val"],
-		"categories": ["Commisions"]
-	}
+  "Godot with coffee": {
+    "path": "resources/images/uploads/godotfanartwithcoffe1.png",
+    "minPath": "resources/images/uploads/godotfanartwithcoffe1.png",
+    "name": "Godot with coffee",
+    "categories": ["Fanarts"],
+    "projects": ["Ace attorney"]
+  },
+  "Jayce and vi": {
+    "path": "resources/images/uploads/Jaycevikprint.png",
+    "minPath": "resources/images/uploads/Jaycevikprint.png",
+    "name": "Jayce and vi",
+    "categories": ["Fanarts"],
+    "projects": ["Arcane"]
+  },
+  "Vi season 2": {
+    "path": "resources/images/uploads/skyleriearts-viiseason2arcaneilhs.jpg",
+    "minPath": "resources/images/uploads/skyleriearts-viiseason2arcaneilhs.jpg",
+    "name": "Vi season 2",
+    "categories": ["Fanarts"],
+    "projects": ["Arcane"]
+  },
+  "Artorias knight of the abyss": {
+    "path": "resources/images/uploads/artroias knight of abysmm.png",
+    "minPath": "resources/images/uploads/artroias knight of abysmm.png",
+    "name": "Artorias knight of the abyss",
+    "categories": ["Fanarts"],
+    "projects": ["Dark souls"]
+  },
+  "Rennala of the full moon": {
+    "path": "resources/images/uploads/RENALAPRINT1.png",
+    "minPath": "resources/images/uploads/RENALAPRINT1.png",
+    "name": "Rennala of the full moon",
+    "categories": ["Fanarts"],
+    "projects": ["Elden ring"]
+  },
+  "Mark and nolan": {
+    "path": "resources/images/uploads/marknolan.png",
+    "minPath": "resources/images/uploads/marknolan.png",
+    "name": "Rennala of the full moon",
+    "categories": ["Fanarts"],
+    "projects": ["Invencible"]
+  },
+  "Arthur morgan": {
+    "path": "resources/images/uploads/arthurmorhgan.png",
+    "minPath": "resources/images/uploads/arthurmorhgan.png",
+    "name": "Arthur morgan",
+    "categories": ["Fanarts"],
+    "projects": ["Red death redemption"]
+  },
+  "Gwen sunflower": {
+    "path": "resources/images/uploads/gewnsunfloweerfbwithbg11.png",
+    "minPath": "resources/images/uploads/gewnsunfloweerfbwithbg11.png",
+    "name": "Gwen sunflower",
+    "categories": ["Fanarts"],
+    "projects": ["Spiderman"]
+  },
+  "Miles and Miguel": {
+    "path": "resources/images/uploads/milesandmiguelvsvs1whitmies.png",
+    "minPath": "resources/images/uploads/milesandmiguelvsvs1whitmies.png",
+    "name": "Miles and Miguel",
+    "categories": ["Fanarts"],
+    "projects": ["Spiderman"]
+  },
+  "Spiderman 2099": {
+    "path": "resources/images/uploads/spiderm2099 scene mask broken2.png",
+    "minPath": "resources/images/uploads/spiderm2099 scene mask broken2.png",
+    "name": "Spiderman 2099",
+    "categories": ["Fanarts"],
+    "projects": ["Spiderman"]
+  },
+  "Goth val": {
+    "path": "resources/images/uploads/gothvalwuiithskll2l.png",
+    "minPath": "resources/images/uploads/gothvalwuiithskll2l.png",
+    "name": "Goth val",
+    "categories": ["Concept art"],
+    "projects": ["val"]
+  },
+  "The things": {
+    "path": "resources/images/uploads/the things were para insdts.png",
+    "minPath": "resources/images/uploads/the things were para insdts.png",
+    "name": "The things",
+    "categories": ["Concept art"],
+    "projects": ["val"]
+  }
 }
