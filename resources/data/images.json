@@ -1,84 +1,84 @@
 {
   "Godot with coffee": {
     "path": "resources/images/uploads/godotfanartwithcoffe1.png",
-    "minPath": "resources/images/uploads/godotfanartwithcoffe1.png",
+    "minPath": "resources/images/uploads/godotfanartwithcoffe1-min.png",
     "name": "Godot with coffee",
     "categories": ["Fanarts"],
     "projects": ["Ace attorney"]
   },
   "Jayce and vi": {
     "path": "resources/images/uploads/Jaycevikprint.png",
-    "minPath": "resources/images/uploads/Jaycevikprint.png",
+    "minPath": "resources/images/uploads/Jaycevikprint-min.png",
     "name": "Jayce and vi",
     "categories": ["Fanarts"],
     "projects": ["Arcane"]
   },
   "Vi season 2": {
     "path": "resources/images/uploads/skyleriearts-viiseason2arcaneilhs.jpg",
-    "minPath": "resources/images/uploads/skyleriearts-viiseason2arcaneilhs.jpg",
+    "minPath": "resources/images/uploads/skyleriearts-viiseason2arcaneilhs-min.jpg",
     "name": "Vi season 2",
     "categories": ["Fanarts"],
     "projects": ["Arcane"]
   },
   "Artorias knight of the abyss": {
     "path": "resources/images/uploads/artroias knight of abysmm.png",
-    "minPath": "resources/images/uploads/artroias knight of abysmm.png",
+    "minPath": "resources/images/uploads/artroias knight of abysmm-min.png",
     "name": "Artorias knight of the abyss",
     "categories": ["Fanarts"],
     "projects": ["Dark souls"]
   },
   "Rennala of the full moon": {
     "path": "resources/images/uploads/RENALAPRINT1.png",
-    "minPath": "resources/images/uploads/RENALAPRINT1.png",
+    "minPath": "resources/images/uploads/RENALAPRINT1-min.png",
     "name": "Rennala of the full moon",
     "categories": ["Fanarts"],
     "projects": ["Elden ring"]
   },
   "Mark and nolan": {
     "path": "resources/images/uploads/marknolan.png",
-    "minPath": "resources/images/uploads/marknolan.png",
+    "minPath": "resources/images/uploads/marknolan-min.png",
     "name": "Rennala of the full moon",
     "categories": ["Fanarts"],
     "projects": ["Invencible"]
   },
   "Arthur morgan": {
     "path": "resources/images/uploads/arthurmorhgan.png",
-    "minPath": "resources/images/uploads/arthurmorhgan.png",
+    "minPath": "resources/images/uploads/arthurmorhgan-min.png",
     "name": "Arthur morgan",
     "categories": ["Fanarts"],
     "projects": ["Red death redemption"]
   },
   "Gwen sunflower": {
     "path": "resources/images/uploads/gewnsunfloweerfbwithbg11.png",
-    "minPath": "resources/images/uploads/gewnsunfloweerfbwithbg11.png",
+    "minPath": "resources/images/uploads/gewnsunfloweerfbwithbg11-min.png",
     "name": "Gwen sunflower",
     "categories": ["Fanarts"],
     "projects": ["Spiderman"]
   },
   "Miles and Miguel": {
     "path": "resources/images/uploads/milesandmiguelvsvs1whitmies.png",
-    "minPath": "resources/images/uploads/milesandmiguelvsvs1whitmies.png",
+    "minPath": "resources/images/uploads/milesandmiguelvsvs1whitmies-min.png",
     "name": "Miles and Miguel",
     "categories": ["Fanarts"],
     "projects": ["Spiderman"]
   },
   "Spiderman 2099": {
     "path": "resources/images/uploads/spiderm2099 scene mask broken2.png",
-    "minPath": "resources/images/uploads/spiderm2099 scene mask broken2.png",
+    "minPath": "resources/images/uploads/spiderm2099 scene mask broken2-min.png",
     "name": "Spiderman 2099",
     "categories": ["Fanarts"],
     "projects": ["Spiderman"]
   },
   "Goth val": {
     "path": "resources/images/uploads/gothvalwuiithskll2l.png",
-    "minPath": "resources/images/uploads/gothvalwuiithskll2l.png",
+    "minPath": "resources/images/uploads/gothvalwuiithskll2l-min.png",
     "name": "Goth val",
     "categories": ["Concept art"],
     "projects": ["val"]
   },
   "The things": {
     "path": "resources/images/uploads/the things were para insdts.png",
-    "minPath": "resources/images/uploads/the things were para insdts.png",
+    "minPath": "resources/images/uploads/the things were para insdts-min.png",
     "name": "The things",
     "categories": ["Concept art"],
     "projects": ["val"]
