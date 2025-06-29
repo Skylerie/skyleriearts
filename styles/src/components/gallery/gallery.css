@@ -1,71 +1,110 @@
 div.gallery {
-    width: 100%;
-    padding-top: 4rem;
+  width: 100%;
+  padding-top: 2rem;
 }
 
-div.gallery.mobile {
-    padding-top: 1rem;
+:root[data-display=mobile] .gallery {
+  padding-top: 1rem;
 }
 
 div.gallery h1#title {
-    color: #666;
-    text-align: center;
-    font-size: 2.2rem;
-    margin: 2.5rem 0;
-    padding: 0 8rem;
-    font-weight: light;
+  color: #666;
+  text-align: center;
+  font-size: 2.2rem;
+  margin: 2.5rem 0;
+  padding: 0 8rem;
+  font-weight: light;
 }
 
 div.gallery.mobile h1#title {
-    font-size: 1.5rem;
-    margin: 1rem 0;
+  font-size: 1.5rem;
+  margin: 1rem 0;
 }
 
 div.gallery ul#image-list {
-    width: 100%;
-    height: 100%;
-    padding: 0 7rem;
-    text-align: start;
+  width: 100%;
+  height: 100%;
+  padding: 0 5rem;
+  text-align: start;
 }
 
 div.gallery.mobile ul#image-list {
-    padding: 0 1rem;
+  padding: 0 1rem;
 }
 
 div.gallery ul#image-list li {
-    display: inline-block;
-    margin: 0.45rem;
-    list-style-type: none;
+  display: inline-block;
+  margin: 0.45rem;
+  list-style-type: none;
 }
 
 div.gallery.mobile ul#image-list li {
-    display: block;
+  display: block;
+}
+
+:root[data-display="mobile"] div.gallery ul#image-list li div.canvas,
+:root[data-display="mobile"] div.gallery ul#image-list li div.canvas img {
+  min-height: 20rem;
+  border-radius: 1.35rem;
 }
 
 div.gallery ul#image-list li div.canvas {
-    filter: brightness(0.95) saturate(0.9);
+  filter: brightness(0.95) saturate(0.9);
+
+  --bg: #f2ede4;
+  --loader-color: rgba(255, 255, 255, 0.15);
+
+  background: linear-gradient(0.25turn, transparent, var(--loader-color), transparent),
+    linear-gradient(var(--bg), var(--bg));
+
+  background-repeat: no-repeat;
+  background-position: -315px 0, 0 0, 0px 190px, 50px 195px;
+
+  animation: loading 1.5s infinite;
 }
+
+div.gallery ul#image-list li div.canvas.loaded {
+  animation: none;
+}
+
+@keyframes loading {
+  to {
+    background-position: 315px 0, 0 0, 0 190px, 50px 195px;
+  }
+}
+
+:root[data-theme="dark"] div.gallery ul#image-list li div.canvas {
+  --bg: rgba(0, 0, 0, 0.10);
+  --loader-color: rgba(255, 255, 255, 0.025)
+}
+
 
 div.gallery ul#image-list li div.canvas,
 div.gallery ul#image-list li div.canvas img {
-    height: 25rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    padding: 0;
-    transition: var(--animation-fast) ease-in-out;
+  height: 18rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  padding: 0;
+  transition: var(--animation-fast) ease-in-out;
 }
 
-div.gallery.mobile ul#image-list li div.canvas,
-div.gallery.mobile ul#image-list li div.canvas img {
-    height: auto;
-    width: 100%;
+:root[data-display=mobile] div.gallery ul#image-list li div.canvas,
+:root[data-display=mobile] div.gallery ul#image-list li div.canvas img {
+  height: auto;
+  width: 100%;
 }
 
 div.gallery ul#image-list li div.canvas img {
-    width: 100%;
+  opacity: 0;
+  width: 100%;
+}
+
+div.gallery ul#image-list div.canvas.loaded img {
+  transition: opacity .35s;
+  opacity: 1;
 }
 
 div.gallery ul#image-list li div.canvas:hover {
-    transform: translateY(-0.25rem);
-    filter: brightness(1.1) saturate(1.1);
+  transform: translateY(-0.25rem);
+  filter: brightness(1.1) saturate(1.1);
 }

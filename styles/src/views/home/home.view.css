@@ -1,71 +1,106 @@
 view#home {
-  width: 100%;
-  height: 100%;
-  min-height: 100vh;
-  max-height: 100vh;
-  font-size: 1.6rem;
-  transition: all 1s;
-  overflow: auto;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    max-height: 100vh;
+    font-size: 1.6rem;
+    transition: all 1s;
+    overflow: auto;
 }
 
 view#home div#gallery-container {
-  width: 100%;
-  min-height: 100vh;
-  height: 100%;
-  max-height: 100vh;
-  overflow: auto;
-  opacity: 1;
-  transition: opacity 0.25s;
+    width: 100%;
+    min-height: 100vh;
+    height: 100%;
+    max-height: 100vh;
+    overflow: auto;
+    opacity: 1;
+    transition: opacity 0.25s;
 }
 
 view#home div#gallery-container div#project-bar {
-  width: 100%;
-  height: 12vh;
-  padding: 1rem;
+    width: 100%;
+    height: auto;
+    flex-wrap: wrap;
+    padding: 1rem;
 }
 
-view#home div#gallery-container h1#title {
-  font-family: "just another hand";
-  font-size: 10rem;
-  color: #9a8e75;
-  width: 100%;
-  text-align: center;
-  padding-top: 2rem;
+view#home div#gallery-container div#view-header {
+    width: 100%;
 }
 
-:root[data-theme="dark"] view#home div#gallery-container h1#title {
-  color: #c2c0bf;
-}
-view#home div#gallery-container div#project-bar button {
-  background-color: #d9d2c3;
-  color: #9a8e75;
-  font-size: 1.2rem;
-  margin: 10px;
+:root[data-display="mobile"] view#home div#gallery-container div#view-header {
+    background: #dad6ce;
 }
 
-view#home div#gallery-container div#project-bar button.selected {
-  background-color: #9a8e75;
-  color: #dcd8d0;
-  font-size: 1.2rem;
-  margin: 10px;
+:root[data-theme="dark"][data-display="mobile"]
+    view#home
+    div#gallery-container
+    div#view-header {
+    background: var(--surface-2);
+}
+
+view#home div#gallery-container div#view-header div#title-bar {
+    padding-top: 2rem;
+    padding-right: 2rem;
+    padding-left: 2rem;
+    padding-bottom: 0;
+}
+
+view#home div#gallery-container div#view-header h1#title {
+    font-family: "just another hand";
+    font-size: 7rem;
+    color: var(--accent-color);
+    width: 100%;
+    text-align: center;
+    padding: 0;
+}
+
+:root[data-display="mobile"]
+    view#home
+    div#gallery-container
+    div#view-header
+    h1#title {
+    font-size: 3.5rem;
+    text-align: left;
+    margin: 0;
 }
 
 :root[data-theme="dark"]
-  view#home
-  div#gallery-container
-  div#project-bar
-  button.selected {
-  background-color: var(--accent-color);
-  color: #573933;
+    view#home
+    div#gallery-container
+    div#view-header
+    h1#title {
+    color: var(--text-color);
 }
 
-:root[data-theme="dark"]
-  view#home
-  div#gallery-container
-  div#project-bar
-  button {
-  background-color: #26211e;
-  color: #c2c0bf;
-  font-size: 1.2rem;
-  margin: 10px;
+:root[data-display="mobile"]
+    view#home
+    div#gallery-container
+    div#view-header
+    div#project-bar {
+    justify-content: left;
+    width: 100%;
+    padding-top: 0.5rem;
+    flex-wrap: nowrap;
+    height: max-content;
+    overflow-x: auto;
+}
+
+view#home div#gallery-container div#view-header div#project-bar button {
+    background-color: var(--on-surface-1);
+    color: var(--text-color);
+    font-size: 1.2rem;
+    margin: 10px;
+}
+
+view#home
+    div#gallery-container
+    div#view-header
+    div#project-bar
+    button.selected {
+    background-color: var(--accent-color);
+    color: var(--on-accent-color);
+    font-size: 1.2rem;
+    margin: 10px;
 }

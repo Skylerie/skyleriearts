@@ -12,7 +12,6 @@ const configurationId = "skyleriearts-website-config"
  */
 export async function loadConfiguration(path: string) {
   assertIdHasBeenChanged()
-
   const loadedConfiguration = await fetch(path).then(res => res.json())
   localStorage[configurationId] = JSON.stringify(loadedConfiguration)
 }
@@ -24,9 +23,9 @@ export async function loadConfiguration(path: string) {
  */
 export function setConfiguration(id: string, value: string) {
   assertIdHasBeenChanged()
-  const configuration = JSON.parse(localStorage[configurationId])
+  const configuration = JSON.parse(localStorage[configurationId] || "{}")
   configuration[id] = value
-  localStorage[configurationId] = configuration
+  localStorage.setItem(configurationId, JSON.stringify(configuration))
 }
 
 /**

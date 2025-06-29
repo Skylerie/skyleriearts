@@ -1,12 +1,12 @@
 import { uuidv4 } from "./crypto.js"
 
-export type signalHandler = (data : any) => Promise<void> 
-const buffer : Map<string, signalHandler[]> = new Map()
+export type signalHandler = (data: any) => Promise<void>
+const buffer: Map<string, signalHandler[]> = new Map()
 
 /**
  * Set a new signal
  */
-export function setSignal() : string {
+export function setSignal(): string {
   const id = uuidv4()
   buffer.set(id, [])
   return id
@@ -17,9 +17,9 @@ export function setSignal() : string {
  * @param id The signal id
  * @param handler The signal handler function
  */
-export function connectToSignal(id : string, handler : signalHandler) {
-    
-  if(false == buffer.has(id)) {
+export function connectToSignal(id: string, handler: signalHandler) {
+
+  if (false == buffer.has(id)) {
     console.error(`Error connecting: The signal ${id} does not exist.`)
     return
   }
@@ -27,12 +27,22 @@ export function connectToSignal(id : string, handler : signalHandler) {
   buffer.get(id).push(handler)
 }
 
+export function disconnectSignal(id: string) {
+
+  if (false == buffer.has(id)) {
+    console.error(`Error connecting: The signal ${id} does not exist.`)
+    return
+  }
+
+  buffer.set(id, [])
+}
+
 /**
  * Emit a signal with the given dat 
  */
-export async function emitSignal(id : string , data: any){
+export async function emitSignal(id: string, data: any) {
 
-  if(false == buffer.has(id))
+  if (false == buffer.has(id))
     return
 
   const targets = buffer.get(id)
