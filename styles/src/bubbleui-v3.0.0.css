@@ -1,16 +1,11 @@
-@font-face {
-  font-family: 'Strawberry Crumble';
-  src: url('../../resources/fonts/Strawberry\ Crumble.otf');
-}
-
 /*
 General variables of the framework
 */
 :root {
-  --font: 'Open Sans', sans-serif;
-  --font-light: 'Open Sans light', sans-serif;
-  --font-title: 'Open Sans', sans-serif;
-  --font-console: 'Ubuntu Mono', monospace;
+  --font: "Open Sans", sans-serif;
+  --font-light: "Open Sans light", sans-serif;
+  --font-title: "Open Sans", sans-serif;
+  --font-console: "Ubuntu Mono", monospace;
   --animation-fast: 0.25s;
   --animation-medium: 0.5s;
   --animation-slow: 0.75s;
@@ -50,7 +45,7 @@ General variables of the framework
   overflow-x: hidden;
   -webkit-tap-highlight-color: transparent;
 }
-:root[data-theme='light-you'] {
+:root[data-theme="light-you"] {
   --surface-1: #bcd6f5;
   --on-surface-1: #000000;
   --surface-2: #a6c8f2;
@@ -66,7 +61,7 @@ General variables of the framework
   --background: #d2e4f9;
   --on-background: #000000;
 }
-:root[data-theme='dark-you'] {
+:root[data-theme="dark-you"] {
   --surface-1: #0a2343;
   --on-surface-1: #ffffff;
   --surface-2: #0d2f59;
@@ -82,7 +77,7 @@ General variables of the framework
   --background: #06182d;
   --on-background: #ffffff;
 }
-:root[data-theme='dark'] {
+:root[data-theme="dark"] {
   --surface-1: #262626;
   --on-surface-1: #ffffff;
   --surface-2: #333333;
@@ -228,7 +223,7 @@ blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: '';
+  content: "";
   content: none;
 }
 table {
@@ -466,8 +461,8 @@ button:hover,
 button:focus {
   filter: brightness(0.9);
 }
-:root[data-theme='dark'] button:hover,
-:root[data-theme='dark'] button:focus {
+:root[data-theme="dark"] button:hover,
+:root[data-theme="dark"] button:focus {
   filter: brightness(1.2);
 }
 button:active {
@@ -486,7 +481,7 @@ input {
   color: var(--on-surface-2);
   outline: 0.15rem solid transparent;
 }
-input[type='checkbox'] {
+input[type="checkbox"] {
   margin: 10px;
 }
 input:focus {

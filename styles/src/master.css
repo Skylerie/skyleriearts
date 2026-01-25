@@ -1,6 +1,11 @@
-@import url('./bubbleui-v3.0.0.css');
-@import url('./components/_import.css');
-@import url('./views/_import.css');
+@import url("./bubbleui-v3.0.0.css");
+@import url("./components/_import.css");
+@import url("./views/_import.css");
+
+@font-face {
+  font-family: "Strawberry Crumble";
+  src: url("../../resources/fonts/Strawberry\ Crumble.otf");
+}
 
 :root {
   --background: #d6bed7;
@@ -16,7 +21,7 @@
 
   --text-color: #4f2641;
 
-  --font: 'Strawberry Crumble', sans-serif;
-  --font-light: 'Strawberry Crumble', sans-serif;
-  --font-title: 'Strawberry Crumble', sans-serif;
+  --font: "Strawberry Crumble", sans-serif;
+  --font-light: "Strawberry Crumble", sans-serif;
+  --font-title: "Strawberry Crumble", sans-serif;
 }
