@@ -1,1 +1,13 @@
-@font-face { font-family: 'Strawberry Crumble'; src: url('../../resources/fonts/Strawberry\ Crumble.otf'); } :root { --background: #d6bed7; --surface-1: #cbabd2; --on-surface-1: #d9d2c3; --surface-2: #cbabd2; --on-surface-2: var(--accent-color); --accent-color: #4f2641; --on-accent-color: #e8e0d3; --text-color: #4f2641; --font: 'Strawberry Crumble', sans-serif; --font-light: 'Strawberry Crumble', sans-serif; --font-title: 'Strawberry Crumble', sans-serif; }
+:root { 
+--background: #d6bed7; 
+--surface-1: #cbabd2; 
+--on-surface-1: #d9d2c3; 
+--surface-2: #cbabd2; 
+--on-surface-2: var(--accent-color); 
+--accent-color: #4f2641; 
+--on-accent-color: #e8e0d3; 
+--text-color: #4f2641; 
+--font: 'Strawberry Crumble', sans-serif; 
+--font-light: 'Strawberry Crumble', sans-serif; 
+--font-title: 'Strawberry Crumble', sans-serif; 
+}
