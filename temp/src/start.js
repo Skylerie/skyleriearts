@@ -2,17 +2,24 @@
     'use strict';
 
     /**
-    * The id of the configuration used in the LocalStorage API
-    * NOTE: Change this value with your app name.
-    */
+     * The id of the configuration used in the LocalStorage API
+     * NOTE: Change this value with your app name.
+     */
     const configurationId = "skyleriearts-website-config";
     /**
      * Load a JSON file as the configuration of the app
      * @param path The file path
      */
     async function loadConfiguration(path) {
-        const loadedConfiguration = await fetch(path).then(res => res.json());
-        localStorage[configurationId] = JSON.stringify(loadedConfiguration);
+        const loadedConfiguration = await fetch(path).then((res) => res.json());
+        if (null != localStorage[configurationId]) {
+            for (const key in loadedConfiguration) {
+                setConfiguration(key, loadedConfiguration[key]);
+            }
+        }
+        else {
+            localStorage[configurationId] = JSON.stringify(loadedConfiguration);
+        }
     }
     /**
      * Set a configuration parameter
@@ -102,14 +109,6 @@
             element.style[key] = styles[key];
         return element;
     }
-    /** Set DOM events*/
-    function setDomEvents(element, events) {
-        if (undefined == element || undefined == events)
-            return element;
-        for (const key in events)
-            element.addEventListener(key, events[key]);
-        return element;
-    }
     /** Set DOM dataset */
     function setDomDataset(element, dataset) {
         if (undefined == element || undefined == dataset)
@@ -150,24 +149,6 @@
     async function loadIcons(id, path) {
         const collection = await fetch(path).then(res => res.json()).catch(console.error);
         icons.set(id, collection);
-    }
-    /**
-     * Get an icon from current bundle
-     * @param collectionId The id of the collection to search in
-     * @param key The id of the icon to search for
-     * @param size (Optional) The size to apply to the icon, applies 24px by default
-     * @param fill (Optional) The color to fill the icon, applies #222222 by default
-     * @returns HTMLElement with the svg element inside, nothing if the icon or collection does not exist
-     */
-    function getIcon(collectionId, key, size = "24px", fill = "#222222") {
-        const collection = icons.get(collectionId);
-        if (undefined == collection)
-            return undefined;
-        const content = collection[key];
-        if (undefined == content)
-            return undefined;
-        const svg = `<svg height="${size}" width="${size}" viewBox="0 0 24 24" fill="${fill}">${content || ""}</svg>`;
-        return uiComponent({ type: "div", text: svg });
     }
 
     const paths = new Map();
@@ -245,95 +226,41 @@
         return -1;
     }
 
-    class ImageService {
-        /**
-         * Load the data from external resource
-         */
-        static async load() {
-            const response = await fetch(`${getConfiguration("path")["resources"]}/data/images.json`);
-            const data = await response.json();
-            ImageService.categories = new Map();
-            for (const imageName in data) {
-                const image = data[imageName];
-                for (const categoryName of image.categories) {
-                    if (ImageService.categories.has(categoryName)) {
-                        ImageService.categories.get(categoryName).add(image);
-                    }
-                    else {
-                        ImageService.categories.set(categoryName, new Set([image]));
-                    }
-                }
-            }
-        }
-        /**
-         * Get image by name
-         * @param name The image name
-         * @returns the image with that name
-         */
-        static getImage(name) {
-            for (const categoryName in ImageService.categories.values()) {
-                const images = ImageService.categories.get(categoryName);
-                for (const image of images) {
-                    if (image.name === name)
-                        return image;
-                }
-            }
-        }
-        /**
-         * Get the images belonging to a project and a category
-         * @param project The project name
-         * @param category The category name
-         * @returns the images belonging to the project and category
-         */
-        static getImagesByProjectAndCategory(project, category) {
-            const foundImages = new Set();
-            ImageService.categories.get(category)?.forEach(image => {
-                if (-1 != image.projects.indexOf(project)) {
-                    foundImages.add(image);
-                }
-            });
-            return foundImages;
-        }
-        /**
-         * Get all the categories
-         * @returns The categories
-         */
-        static getCategories() {
-            return new Set(ImageService.categories.keys());
-        }
-        /**
-         * Get the project of a category
-         * @returns The projects of a category
-         */
-        static getProjectsOfCategory(category) {
-            const found = new Set();
-            for (const images of ImageService.categories.get(category)) {
-                for (const project of images.projects) {
-                    found.add(project);
-                }
-            }
-            return found;
-        }
+    const errors = {
+        200: {
+            code: 200,
+            message: "Success",
+            friendly: "Success",
+            description: "The operation succeded.",
+        },
+        400: {
+            code: 400,
+            message: "Bad request",
+            friendly: "The request is not valid",
+            description: "The parameters may be wrong or missing.",
+        },
+        401: {
+            code: 401,
+            message: "Unauthorized",
+            friendly: "You have no permissions to access this content 🔐",
+            description: "The content is protected, contact the administrator to get access.",
+        },
+        404: {
+            code: 404,
+            message: "Not found",
+            friendly: "We can't find the page you are looking for 😓",
+            description: "The page you're searching for is no longer available.",
+        },
+        500: {
+            code: 500,
+            message: "Internal server error",
+            friendly: "Ups, something went wrong 😓",
+            description: "The server is experimenting an unexpected error, contact the administrator for more information.",
+        },
+    };
+    function getErrorByCode(code) {
+        return errors[code];
     }
-    ImageService.categories = new Map();
-
-    /**
-     * This enum represents the Bubble UI css framework
-     */
-    var BubbleUI;
-    (function (BubbleUI) {
-        BubbleUI["BoxColumn"] = "box-column";
-        BubbleUI["BoxRow"] = "box-row";
-        BubbleUI["boxWrap"] = "box-warp";
-        BubbleUI["BoxCenter"] = "box-center";
-        BubbleUI["BoxXCenter"] = "box-x-center";
-        BubbleUI["BoxYCenter"] = "box-y-center";
-        BubbleUI["BoxXStart"] = "box-x-start";
-        BubbleUI["BoxXEnd"] = "box-x-end";
-        BubbleUI["BoxYStart"] = "box-y-start";
-        BubbleUI["BoxXBetween"] = "box-x-between";
-        BubbleUI["TextCenter"] = "text-center";
-    })(BubbleUI || (BubbleUI = {}));
 
     /**
      * This enum contains the most common HTML tags
@@ -401,236 +328,15 @@
         Html["Filter"] = "filter";
     })(Html || (Html = {}));
 
-    function uuidv4() {
-        return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c => (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16));
-    }
-
-    const buffer = new Map();
-    /**
-     * Set a new signal
-     */
-    function setSignal() {
-        const id = uuidv4();
-        buffer.set(id, []);
-        return id;
-    }
-    /**
-     * Connect a function to a signal
-     * @param id The signal id
-     * @param handler The signal handler function
-     */
-    function connectToSignal(id, handler) {
-        if (false == buffer.has(id)) {
-            console.error(`Error connecting: The signal ${id} does not exist.`);
-            return;
-        }
-        buffer.get(id).push(handler);
-    }
-    function disconnectSignal(id) {
-        if (false == buffer.has(id)) {
-            console.error(`Error connecting: The signal ${id} does not exist.`);
-            return;
-        }
-        buffer.set(id, []);
-    }
-    /**
-     * Emit a signal with the given dat
-     */
-    async function emitSignal(id, data) {
-        if (false == buffer.has(id))
-            return;
-        const targets = buffer.get(id);
-        for (const target of targets) {
-            target(data);
-        }
-    }
-
-    class Theme {
-        static toggle() {
-            if (document.documentElement.dataset.theme == "dark") {
-                setDomDataset(document.documentElement, { theme: "light" });
-            }
-            else {
-                setDomDataset(document.documentElement, { theme: "dark" });
-            }
-        }
-    }
-
-    /**
-     * This class represents the header of the application
-     * it is static because only one is needed across th app.
-     */
-    class Header {
-        /**
-         * Render the header
-         * @param options The header options
-         * @returns The composed HTML element
-         */
-        static render(options) {
-            this.checkIfToggleEnabled();
-            disconnectSignal(this.OPTION_SELECTED_SIGNAL);
-            let header = uiComponent({
-                type: Html.Div,
-                id: Header.HEADER_ID,
-                classes: [BubbleUI.BoxColumn, BubbleUI.BoxXStart, BubbleUI.BoxYCenter],
-            });
-            const profilePicture = uiComponent({
-                type: Html.Img,
-                id: "logo",
-                attributes: {
-                    src: `${getConfiguration("path")["images"]}/logo.jpg`,
-                },
-            });
-            setDomEvents(profilePicture, {
-                click: () => { Theme.toggle(); }
-            });
-            const title = uiComponent({
-                type: Html.H1,
-                text: "Skylerie",
-                id: "title",
-                classes: [BubbleUI.TextCenter],
-            });
-            const selected = options.values().next().value;
-            const tagMenu = this.drawOptions(options, selected);
-            header.appendChild(profilePicture);
-            header.appendChild(title);
-            header.appendChild(tagMenu);
-            return header;
-        }
-        /**
-         * Draw the options of the menu
-         * @param options The options to show
-         * @param selected The selected option
-         * @returns The composed HTML element
-         */
-        static drawOptions(options, selected) {
-            const menu = uiComponent({
-                type: Html.Div,
-                id: Header.TAG_MENU_ID,
-                classes: [BubbleUI.BoxColumn, BubbleUI.BoxXStart, BubbleUI.BoxYStart],
-            });
-            options.forEach(option => {
-                const button = uiComponent({
-                    type: Html.Button,
-                    text: option,
-                    classes: selected == option ? [Header.TAG_BUTTON_CLASS, "selected"] : [Header.TAG_BUTTON_CLASS],
-                });
-                setDomEvents(button, {
-                    click: (e) => {
-                        if (!this.toggleEnabled && e.target.classList.contains("selected"))
-                            return;
-                        const buttons = document.querySelectorAll(`#${Header.HEADER_ID} .${Header.TAG_BUTTON_CLASS}`);
-                        buttons.forEach(b => b.classList.remove("selected"));
-                        button.classList.add("selected");
-                        Header.toggle();
-                        emitSignal(Header.OPTION_SELECTED_SIGNAL, option);
-                    }
-                });
-                menu.appendChild(button);
-            });
-            return menu;
-        }
-        static toggle() {
-            this.checkIfToggleEnabled();
-            if (!this.toggleEnabled)
-                return;
-            document.getElementById(this.HEADER_ID).classList.toggle("hide");
-        }
-        static checkIfToggleEnabled() {
-            if (isMobile() || isSmallDevice() || isMediumDevice()) {
-                this.toggleEnabled = true;
-                return;
-            }
-            this.toggleEnabled = false;
-        }
-    }
-    Header.HEADER_ID = "header";
-    Header.TAG_MENU_ID = "tag-menu";
-    Header.TAG_BUTTON_CLASS = "tag-button";
-    Header.toggleEnabled = false;
-    Header.OPTION_SELECTED_SIGNAL = setSignal();
-
-    class BioView {
-        static async show(parameters, container) {
-            container.innerHTML = "";
-            const options = new Set();
-            options.add(BioView.ABOUT_ME_TAG);
-            options.add(BioView.SOCIAL_MEDIA_TAG);
-            options.add(BioView.PROJECT_TAG);
-            const header = Header.render(options);
-            container.appendChild(header);
-            const content = uiComponent({});
-            connectToSignal(Header.OPTION_SELECTED_SIGNAL, async (option) => {
-                switch (option) {
-                    case BioView.PROJECT_TAG:
-                        window.open("/#/", "_self");
-                        break;
-                    case BioView.ABOUT_ME_TAG:
-                        BioView.renderAboutMe(content);
-                        break;
-                    case BioView.SOCIAL_MEDIA_TAG:
-                        BioView.renderSocialMedia(content);
-                        break;
-                }
-            });
-            container.appendChild(content);
-        }
-        static renderAboutMe(container) {
-            container.innerHTML = "About me";
-        }
-        static renderSocialMedia(container) {
-            container.innerHTML = "Social media";
-        }
-    }
-    BioView.ABOUT_ME_TAG = "About me";
-    BioView.SOCIAL_MEDIA_TAG = "Social media";
-    BioView.PROJECT_TAG = "Projects";
-
-    const errors = {
-        200: {
-            code: 200,
-            message: "Success",
-            friendly: "Success",
-            description: "The operation succeded.",
-        },
-        400: {
-            code: 400,
-            message: "Bad request",
-            friendly: "The request is not valid",
-            description: "The parameters may be wrong or missing.",
-        },
-        401: {
-            code: 401,
-            message: "Unauthorized",
-            friendly: "You have no permissions to access this content 🔐",
-            description: "The content is protected, contact the administrator to get access.",
-        },
-        404: {
-            code: 404,
-            message: "Not found",
-            friendly: "We can't find the page you are looking for 😓",
-            description: "The page you're searching for is no longer available.",
-        },
-        500: {
-            code: 500,
-            message: "Internal server error",
-            friendly: "Ups, something went wrong 😓",
-            description: "The server is experimenting an unexpected error, contact the administrator for more information.",
-        },
-    };
-    function getErrorByCode(code) {
-        return errors[code];
-    }
-
     const DEFAULT_ERROR_CODE = 404;
-    const ID = "error";
-    const IMAGE_ID$1 = "error-img";
-    const TITLE_ID = "error-title";
+    const ID = 'error';
+    const IMAGE_ID = 'error-img';
+    const TITLE_ID = 'error-title';
     async function showErrorView(params, container) {
         const view = uiComponent({
-            type: "view",
+            type: 'view',
             id: ID,
-            classes: ["box-column", "box-center"],
+            classes: ['box-column', 'box-center']
         });
         const code = parseInt(params[0]);
         let error = getErrorByCode(code);
@@ -641,489 +347,300 @@
         // Image
         const image = uiComponent({
             type: Html.Img,
-            id: IMAGE_ID$1,
+            id: IMAGE_ID,
             attributes: {
-                src: `${getConfiguration("path")["icons"]}/error.svg`,
-            },
+                src: `${getConfiguration('path')['icons']}/error.svg`
+            }
         });
         view.appendChild(image);
         // Error title
         const title = uiComponent({
             type: Html.H1,
             id: TITLE_ID,
-            text: error.friendly,
+            text: error.friendly
         });
         view.appendChild(title);
         // Error description
         const description = uiComponent({
             type: Html.P,
-            text: error.description,
+            text: error.description
         });
         view.appendChild(description);
         container.appendChild(view);
     }
 
     /**
-     * Renderer class for the image galleries.
+     * This enum represents the Bubble UI css framework
      */
-    class ImageGallery {
-        /**
-         * Render a gallery
-         * @param images The images to show
-         * @returns The composed HTML element
-         */
-        static render(images) {
-            // if nothing to show, return
-            if (undefined == images) {
-                console.error("No images to show in gallery.");
-                return;
-            }
-            let gallery = uiComponent({
-                type: Html.Div,
-                classes: [
-                    ImageGallery.CLASS,
-                    BubbleUI.BoxColumn,
-                    BubbleUI.BoxXStart,
-                    BubbleUI.BoxYStart,
-                ],
-            });
-            // turn on mobile class if needed
-            if (isSmallDevice()) {
-                gallery.classList.add(ImageGallery.MOBILE_CLASS);
-            }
-            // Add a list of images to show
-            // in the gallery
-            const list = this.createImageList(images);
-            gallery.appendChild(list);
-            return gallery;
-        }
-        static update(container, images) {
-            container.innerHTML = "";
-            container.appendChild(this.createImageList(images));
-            return container;
-        }
-        static createImageList(images) {
-            // Add a list of images to show
-            // in the gallery
-            const list = uiComponent({
-                type: Html.Ul,
-                id: ImageGallery.LIST_ID,
-            });
-            images?.forEach((image) => this.register(list, image, images));
-            return list;
-        }
-        /**
-         * Register an image in the gallery
-         * @param container The HTML container to attach the images to
-         * @param image The image to attach
-         * @param album The album the image is belonging to
-         */
-        static register(container, image, album) {
-            const item = uiComponent({ type: Html.Li });
-            const canvas = this.renderImageCanvas(image, album);
-            setTimeout(() => canvas.style.opacity = "1", 1);
-            item.appendChild(canvas);
-            container.appendChild(item);
-        }
-        /**
-         * Render the canvas for the image
-         * @param image The image to attach to the canvas
-         * @param album The album the image belongs to
-         * @returns The composed HTML element
-         */
-        static renderImageCanvas(image, album) {
-            const canvas = uiComponent({
-                type: Html.Div,
-                classes: ["canvas"],
-            });
-            setDomEvents(canvas, {
-                click: () => {
-                    emitSignal(ImageGallery.IMAGE_SELECTED_SIGNAL, {
-                        images: Array.from(album.values()),
-                        selected: image,
-                    });
-                },
-            });
-            const imageComponent = uiComponent({
-                type: Html.Img,
-                attributes: {
-                    src: image.minPath,
-                    alt: image.name,
-                    loading: "lazy",
-                    background: "#fff",
-                },
-            });
-            imageComponent.onload = () => setDomClasses(canvas, ["loaded"]);
-            setDomEvents(imageComponent, {
-                load: () => (imageComponent.style.opacity = "1"),
-            });
-            canvas.appendChild(imageComponent);
-            return canvas;
-        }
-    }
-    ImageGallery.CLASS = "gallery";
-    ImageGallery.LIST_ID = "image-list";
-    ImageGallery.MOBILE_CLASS = "mobile";
-    ImageGallery.IMAGE_SELECTED_SIGNAL = setSignal();
+    var BubbleUI;
+    (function (BubbleUI) {
+        BubbleUI["BoxColumn"] = "box-column";
+        BubbleUI["BoxRow"] = "box-row";
+        BubbleUI["boxWrap"] = "box-warp";
+        BubbleUI["BoxCenter"] = "box-center";
+        BubbleUI["BoxXCenter"] = "box-x-center";
+        BubbleUI["BoxYCenter"] = "box-y-center";
+        BubbleUI["BoxXStart"] = "box-x-start";
+        BubbleUI["BoxXEnd"] = "box-x-end";
+        BubbleUI["BoxYStart"] = "box-y-start";
+        BubbleUI["BoxXBetween"] = "box-x-between";
+        BubbleUI["TextCenter"] = "text-center";
+    })(BubbleUI || (BubbleUI = {}));
 
-    const VISUALIZER_ID = "visualizer";
-    const VISUALIZER_CANVAS_ID = "canvas";
-    const BUTTON_BACK_ID = "visualizer-back";
-    const BUTTON_NEXT_ID = "visualizer-next";
-    const IMAGE_ID = "visualizer-image";
-    const NAME_ID = "visualizer-name";
-    const INFO_TEXT_ID = "visualizer-info-text";
     /**
-     * This class is responsible of processing
-     * the image gallery and current image to
-     * display.
+     * This enum represents the available HTTP methods
+     * @author akrck02
      */
-    class VisualizerProcessor {
-        constructor() {
-            this.images = new Array();
-            this.index = 0;
-        }
-        load(images) {
-            this.images = images;
-        }
-        isFirstImage() {
-            if (0 == this.images.length)
-                return false;
-            return 0 == this.index;
-        }
-        isLastImage() {
-            if (0 == this.images.length)
-                return false;
-            return this.images.length - 1 == this.index;
-        }
-        set(currentImage) {
-            this.index = this.getIndexOf(currentImage);
-            if (this.index < 1)
-                this.index = 0;
-        }
-        getIndexOf(currentImage) {
-            for (let i = 0; i < this.images.length; i++) {
-                const image = this.images[i];
-                if (image.name == currentImage.name) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-        getCurrentImage() {
-            if (0 == this.images.length)
-                return null;
-            return this.images[this.index];
-        }
-        next() {
-            if (0 == this.images.length)
-                return;
-            this.index++;
-            if (this.images.length <= this.index)
-                this.index = 0;
-        }
-        previous() {
-            if (0 == this.images.length)
-                return;
-            this.index--;
-            if (0 > this.index)
-                this.index = this.images.length - 1;
-        }
+    var HttpMethod;
+    (function (HttpMethod) {
+        HttpMethod["Get"] = "GET";
+        HttpMethod["Post"] = "POST";
+        HttpMethod["Put"] = "PUT";
+        HttpMethod["Delete"] = "DELETE";
+        HttpMethod["Update"] = "UPDATE";
+        HttpMethod["Patch"] = "PATCH";
+        HttpMethod["Head"] = "HEAD";
+        HttpMethod["Options"] = "OPTIONS";
+        HttpMethod["Connect"] = "CONNECT";
+        HttpMethod["Trace"] = "TRACE";
+        HttpMethod["All"] = "ALL";
+    })(HttpMethod || (HttpMethod = {}));
+    /**
+     * This enum represents the available mime types
+     * @author akrck02
+     */
+    var MimeType;
+    (function (MimeType) {
+        MimeType["Json"] = "application/json";
+        MimeType["Xml"] = "application/xml";
+        MimeType["Html"] = "text/html";
+        MimeType["Text"] = "text/plain";
+        MimeType["Form"] = "multipart/form-data";
+        MimeType["UrlEncoded"] = "application/x-www-form-urlencoded";
+        MimeType["Blob"] = "application/octet-stream";
+        MimeType["Pdf"] = "application/pdf";
+        MimeType["Zip"] = "application/zip";
+        MimeType["Mp3"] = "audio/mpeg";
+        MimeType["Mp4"] = "video/mp4";
+        MimeType["Png"] = "image/png";
+        MimeType["Jpeg"] = "image/jpeg";
+        MimeType["Gif"] = "image/gif";
+        MimeType["Svg"] = "image/svg+xml";
+        MimeType["Ico"] = "image/x-icon";
+        MimeType["Csv"] = "text/csv";
+        MimeType["Css"] = "text/css";
+        MimeType["Javascript"] = "text/javascript";
+        MimeType["Typescript"] = "text/typescript";
+        MimeType["Webm"] = "video/webm";
+        MimeType["Ogg"] = "video/ogg";
+        MimeType["Ogv"] = "video/ogv";
+        MimeType["Wav"] = "audio/wav";
+        MimeType["Webp"] = "image/webp";
+        MimeType["Woff"] = "font/woff";
+        MimeType["Woff2"] = "font/woff2";
+        MimeType["Ttf"] = "font/ttf";
+        MimeType["Eot"] = "application/vnd.ms-fontobject";
+        MimeType["Otf"] = "font/otf";
+        MimeType["Xls"] = "application/vnd.ms-excel";
+        MimeType["Xlsx"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        MimeType["Doc"] = "application/msword";
+        MimeType["Docx"] = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        MimeType["Ppt"] = "application/vnd.ms-powerpoint";
+        MimeType["Pptx"] = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+        MimeType["Msg"] = "application/vnd.ms-outlook";
+        MimeType["Rtf"] = "application/rtf";
+        MimeType["Psd"] = "application/photoshop";
+        MimeType["Ai"] = "application/postscript";
+        MimeType["Eps"] = "application/postscript";
+        MimeType["Xps"] = "application/vnd.ms-xpsdocument";
+        MimeType["Swf"] = "application/x-shockwave-flash";
+        MimeType["Flv"] = "video/x-flv";
+        MimeType["Midi"] = "audio/midi";
+        MimeType["Wma"] = "audio/x-ms-wma";
+        MimeType["Wax"] = "audio/x-ms-wax";
+        MimeType["Mka"] = "audio/x-matroska";
+        MimeType["Mkv"] = "video/x-matroska";
+        MimeType["Avi"] = "video/x-msvideo";
+        MimeType["Mov"] = "video/quicktime";
+        MimeType["Wmv"] = "video/x-ms-wmv";
+        MimeType["M4a"] = "audio/mp4";
+        MimeType["M4v"] = "video/mp4";
+        MimeType["F4v"] = "video/mp4";
+        MimeType["F4a"] = "audio/mp4";
+        MimeType["F4b"] = "audio/mp4";
+        MimeType["M4b"] = "audio/mp4";
+        MimeType["M4r"] = "audio/mp4";
+        MimeType["Mpga"] = "audio/mpeg";
+        MimeType["Mp2"] = "audio/mpeg";
+        MimeType["Mp2A"] = "audio/mpeg";
+        MimeType["M2a"] = "audio/mpeg";
+        MimeType["M3a"] = "audio/mpeg";
+        MimeType["Oga"] = "audio/ogg";
+    })(MimeType || (MimeType = {}));
+    /**
+     * This enum represents the available text encodings
+     * @author akrck02
+     */
+    var TextEncoding;
+    (function (TextEncoding) {
+        TextEncoding["Utf8"] = "UTF-8";
+        TextEncoding["Utf16"] = "UTF-16";
+        TextEncoding["Utf16be"] = "UTF-16BE";
+        TextEncoding["Utf16le"] = "UTF-16LE";
+        TextEncoding["Iso88591"] = "ISO-8859-1";
+        TextEncoding["Iso88592"] = "ISO-8859-2";
+        TextEncoding["Iso88593"] = "ISO-8859-3";
+        TextEncoding["Iso88594"] = "ISO-8859-4";
+        TextEncoding["Iso88595"] = "ISO-8859-5";
+        TextEncoding["Iso88596"] = "ISO-8859-6";
+        TextEncoding["Iso88597"] = "ISO-8859-7";
+        TextEncoding["Iso88598"] = "ISO-8859-8";
+        TextEncoding["Iso88599"] = "ISO-8859-9";
+        TextEncoding["Iso885910"] = "ISO-8859-10";
+        TextEncoding["Iso885913"] = "ISO-8859-13";
+        TextEncoding["Iso885914"] = "ISO-8859-14";
+        TextEncoding["Iso885915"] = "ISO-8859-15";
+        TextEncoding["Iso885916"] = "ISO-8859-16";
+        TextEncoding["Koi8R"] = "KOI8-R";
+        TextEncoding["Koi8U"] = "KOI8-U";
+        TextEncoding["Macintosh"] = "macintosh";
+        TextEncoding["Windows1250"] = "windows-1250";
+        TextEncoding["Windows1251"] = "windows-1251";
+        TextEncoding["Windows1252"] = "windows-1252";
+        TextEncoding["Windows1253"] = "windows-1253";
+        TextEncoding["Windows1254"] = "windows-1254";
+        TextEncoding["Windows1255"] = "windows-1255";
+        TextEncoding["Windows1256"] = "windows-1256";
+        TextEncoding["Windows1257"] = "windows-1257";
+        TextEncoding["Windows1258"] = "windows-1258";
+        TextEncoding["Xmaccyrillic"] = "x-mac-cyrillic";
+        TextEncoding["Gb18030"] = "GB18030";
+        TextEncoding["Big5"] = "Big5";
+        TextEncoding["Shiftjis"] = "Shift_JIS";
+        TextEncoding["Eucjp"] = "EUC-JP";
+        TextEncoding["Iso2022jp"] = "ISO-2022-JP";
+        TextEncoding["Euckr"] = "EUC-KR";
+        TextEncoding["Iso2022kr"] = "ISO-2022-KR";
+        TextEncoding["Ibm866"] = "IBM866";
+        TextEncoding["Ibm775"] = "IBM775";
+        TextEncoding["Iso885911"] = "ISO-8859-11";
+        TextEncoding["Windows874"] = "windows-874";
+        TextEncoding["Tis620"] = "TIS-620";
+    })(TextEncoding || (TextEncoding = {}));
+    /**
+     * Make a HTTP GET request.
+     * @param request The request parameters.
+     * @returns The promise of a response.
+     */
+    async function httpGet(request) {
+        request.method = HttpMethod.Get;
+        return httpRequest(request);
     }
     /**
-     * This is a ui component responsible of showing
-     * a gallery of images.
+     * Make a HTTP request.
+     * @param request The request parameters.
+     * @returns The promise of a response.
      */
-    class Visualizer {
-        /**
-         * Render a visualizer
-         */
-        static render(processor) {
-            let visualizer = document.getElementById(VISUALIZER_ID);
-            return null == visualizer ? Visualizer.create(processor) : Visualizer.update(visualizer, processor);
-        }
-        /**
-         * Create a new visualizer given an state
-         */
-        static create(processor) {
-            const visualizer = uiComponent({
-                type: Html.Div,
-                id: VISUALIZER_ID,
-                classes: [BubbleUI.BoxRow, BubbleUI.BoxCenter],
-            });
-            const buttonBack = getIcon("material", "back", "48px", "var(--text-color)");
-            buttonBack.id = BUTTON_BACK_ID;
-            setDomEvents(buttonBack, {
-                click: () => {
-                    processor.previous();
-                    this.render(processor);
-                }
-            });
-            const buttonNext = getIcon("material", "back", "48px", "var(--text-color)");
-            buttonNext.id = BUTTON_NEXT_ID;
-            setDomEvents(buttonNext, {
-                click: () => {
-                    processor.next();
-                    this.render(processor);
-                }
-            });
-            const imageCanvas = uiComponent({
-                type: Html.Div,
-                id: VISUALIZER_CANVAS_ID,
-                classes: [BubbleUI.BoxColumn, BubbleUI.BoxYCenter, BubbleUI.BoxXCenter]
-            });
-            const image = uiComponent({
-                type: Html.Img,
-                id: IMAGE_ID,
-                attributes: {
-                    src: processor.getCurrentImage()?.path || "",
-                    loading: "lazy"
-                },
-            });
-            imageCanvas.appendChild(image);
-            const name = uiComponent({
-                type: Html.H1,
-                id: NAME_ID,
-                text: processor.getCurrentImage()?.name,
-                selectable: false
-            });
-            imageCanvas.appendChild(name);
-            const infoText = uiComponent({
-                type: Html.P,
-                id: INFO_TEXT_ID,
-                text: "Touch to close the visualizer.",
-                classes: ["info-text"],
-                selectable: false
-            });
-            setDomEvents(visualizer, {
-                click: (event) => {
-                    //if the click is not on the image, close the visualizer
-                    if (event.target != visualizer && event.target != image && event.target != imageCanvas)
-                        return;
-                    event.stopPropagation();
-                    visualizer.style.display = "none";
-                }
-            });
-            visualizer.appendChild(buttonBack);
-            visualizer.appendChild(imageCanvas);
-            visualizer.appendChild(buttonNext);
-            visualizer.appendChild(infoText);
-            return visualizer;
-        }
-        /**
-         * Update the visualizer with the current processor state.
-         */
-        static update(visualizer, processor) {
-            const image = document.getElementById(IMAGE_ID);
-            image.style.display = "flex";
-            image.setAttribute("src", processor.getCurrentImage()?.path || "");
-            const name = document.getElementById(NAME_ID);
-            name.innerText = processor.getCurrentImage().name || "";
-            return visualizer;
-        }
-        static show() {
-            const visualizer = document.getElementById(VISUALIZER_ID);
-            if (null == visualizer)
-                return;
-            visualizer.style.display = "flex";
-        }
-    }
-
-    class HomeView {
-        /**
-        * Show home view
-        */
-        static async show(parameters, container) {
-            const categories = new Set(ImageService.getCategories());
-            const view = uiComponent({
-                type: Html.View,
-                id: HomeView.VIEW_ID,
-                classes: [BubbleUI.BoxRow, BubbleUI.BoxXStart, BubbleUI.BoxYStart],
-            });
-            const selectedCategory = parameters[0] || categories.values().next().value;
-            const visualizer = Visualizer.render(HomeView.visualizerProcessor);
-            const header = Header.render(categories);
-            const galleryContainer = uiComponent({
-                type: Html.Div,
-                id: "gallery-container",
-                classes: [BubbleUI.BoxColumn, BubbleUI.BoxXStart, BubbleUI.BoxYStart],
-            });
-            connectToSignal(Header.OPTION_SELECTED_SIGNAL, async (category) => HomeView.showImages(galleryContainer, category, undefined));
-            connectToSignal(HomeView.PROJECT_SELECTED_SIGNAL, async (data) => HomeView.showImages(galleryContainer, data?.category, data?.project));
-            view.appendChild(header);
-            view.appendChild(galleryContainer);
-            view.appendChild(visualizer);
-            container.appendChild(view);
-            if (Display.isMobile() == false)
-                emitSignal(Header.OPTION_SELECTED_SIGNAL, selectedCategory);
-        }
-        /**
-         * Show the projects of the selected tag
-         * @param container The container of the gallery
-         * @param currentCategoryName The selected tag
-         * @param currentProject The selected project
-         */
-        static async showImages(container, currentCategoryName, currentProjectName) {
-            // If container is not present, return
-            if (undefined == container) {
-                console.error(`Undefined container.`);
-                return;
+    function httpRequest(request) {
+        let options = {
+            method: request.method || HttpMethod.Get,
+            headers: {
+                'Content-type': `${request.contentType || 'application/json'};charset=${request.charset || 'UTF-8'}`,
+                mode: 'cors',
+                'Sec-Fetch-Site': 'cross-site'
             }
-            // If tag is not selected, return
-            if (undefined == currentCategoryName) {
-                console.error(`Tag ${currentCategoryName} not found.`);
-                return;
-            }
-            // If the project is not found, return
-            const projects = ImageService.getProjectsOfCategory(currentCategoryName);
-            if (undefined == projects || 0 == projects.size) {
-                console.error(`No projects present.`);
-                return;
-            }
-            // Get current project
-            if (currentProjectName == undefined)
-                currentProjectName = projects.values().next().value;
-            const projectChanged = container.dataset.project != currentProjectName;
-            const categoryChanged = container.dataset.category != currentCategoryName;
-            if (categoryChanged) {
-                if (!Display.isMobile()) {
-                    // Disappear animation
-                    container.style.opacity = "0";
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                }
-                container.innerHTML = "";
-                const viewHeader = uiComponent({
-                    id: HomeView.VIEW_HEADER_ID
-                });
-                const titleBar = uiComponent({
-                    classes: [BubbleUI.BoxRow, BubbleUI.BoxXBetween, BubbleUI.BoxYCenter],
-                    id: HomeView.TITLE_BAR_ID,
-                    styles: {
-                        width: "100%"
-                    }
-                });
-                const title = uiComponent({
-                    type: Html.H1,
-                    text: currentCategoryName,
-                    id: "title"
-                });
-                titleBar.appendChild(title);
-                if (Display.isMobile()) {
-                    const icon = uiComponent({
-                        type: Html.Img,
-                        attributes: {
-                            src: getConfiguration("path")["icons"] + "/menu-icon.svg"
-                        }
-                    });
-                    titleBar.appendChild(icon);
-                    setDomEvents(icon, {
-                        click: () => { Header.toggle(); }
-                    });
-                }
-                viewHeader.appendChild(titleBar);
-                const bar = HomeView.renderProjectBar(projects, currentProjectName, currentCategoryName);
-                viewHeader.appendChild(bar);
-                container.appendChild(viewHeader);
-                this.render(container, currentProjectName, currentCategoryName);
-                // appear animation
-                container.style.opacity = "1";
-                await new Promise(resolve => setTimeout(resolve, 260));
-            }
-            else if (projectChanged) {
-                let title = container.querySelector("#title");
-                title.innerHTML = currentCategoryName;
-                this.render(container, currentProjectName, currentCategoryName);
-            }
-            setDomDataset(container, {
-                project: currentProjectName,
-                category: currentCategoryName
-            });
-        }
-        static async render(container, currentProjectName, currentCategoryName) {
-            // Create the project gallery
-            const images = ImageService.getImagesByProjectAndCategory(currentProjectName, currentCategoryName);
-            let gallery = document.querySelector(`.${ImageGallery.CLASS}`);
-            if (null == gallery) {
-                gallery = ImageGallery.render(images);
-                connectToSignal(ImageGallery.IMAGE_SELECTED_SIGNAL, async (data) => {
-                    HomeView.visualizerProcessor.load(data.images);
-                    HomeView.visualizerProcessor.set(data.selected);
-                    Visualizer.render(HomeView.visualizerProcessor);
-                    Visualizer.show();
-                });
-                container.appendChild(gallery);
+        };
+        request.headers && Object.assign(options.headers, request.headers);
+        if (HttpMethod.Get !== request.method) {
+            if (request.parameters instanceof FormData) {
+                options['body'] = request.parameters;
+                options.headers['Content-type'] =
+                    `multipart/form-data;charset=${request.charset || 'UTF-8'}`;
             }
             else {
-                this.selectProject(container, currentProjectName);
-                ImageGallery.update(gallery, images);
+                options['body'] = JSON.stringify(request.parameters);
             }
         }
-        /**
-         * Render the project bar
-         * @param projects The projects to add to the bar
-         * @param currentProjectName The current selected project name
-         * @param categoryName The current category name
-         * @returns The composed HTML element
-         */
-        static renderProjectBar(projects, currentProjectName, categoryName) {
-            const bar = uiComponent({
-                type: Html.Div,
-                id: "project-bar",
-                classes: [BubbleUI.BoxRow, BubbleUI.BoxXCenter, BubbleUI.BoxYStart],
-            });
-            projects.forEach(project => {
-                const button = uiComponent({
-                    type: Html.Button,
-                    text: project,
-                    classes: project == currentProjectName ? ["selected"] : [],
-                });
-                button.onclick = () => emitSignal(HomeView.PROJECT_SELECTED_SIGNAL, {
-                    category: categoryName,
-                    project: project,
-                });
-                bar.appendChild(button);
-            });
-            return bar;
-        }
-        static selectProject(container, currentProject) {
-            const buttons = container.querySelectorAll(`#project-bar button`);
-            console.log(buttons);
-            for (const button of buttons) {
-                const htmlButton = button;
-                if (htmlButton.textContent == currentProject) {
-                    htmlButton.classList.add("selected");
-                }
-                else {
-                    htmlButton.classList.remove("selected");
-                }
-            }
-        }
+        return fetch(request.url, options);
     }
-    // HTML ids and classes
-    HomeView.VIEW_ID = "home";
-    HomeView.VIEW_HEADER_ID = "view-header";
-    HomeView.TITLE_BAR_ID = "title-bar";
-    HomeView.TITLE_ID = "title";
-    // Signals
-    HomeView.PROJECT_SELECTED_SIGNAL = setSignal();
-    // Data
-    HomeView.visualizerProcessor = new VisualizerProcessor();
+
+    async function showSummaryView(parameters, container) {
+        const view = uiComponent({
+            type: Html.View,
+            id: 'summary',
+            classes: [BubbleUI.BoxColumn, BubbleUI.BoxCenter],
+            styles: {
+                marginTop: '10rem'
+            }
+        });
+        const title = uiComponent({
+            type: Html.Img,
+            attributes: {
+                src: `${getConfiguration('path')['images']}/skyleriearts-logo.png`
+            },
+            styles: {
+                width: '20rem'
+            }
+        });
+        view.appendChild(title);
+        const comment = uiComponent({
+            type: Html.Text,
+            text: 'We are rebuilding this website!',
+            styles: {
+                marginTop: '2rem',
+                color: '#A870C3',
+                fontSize: '1rem'
+            }
+        });
+        view.appendChild(comment);
+        const description = uiComponent({
+            type: Html.Text,
+            text: 'Contact me',
+            styles: {
+                marginTop: '5rem',
+                color: '#A870C3',
+                fontSize: '2rem',
+                textDecoration: 'underline'
+            }
+        });
+        view.appendChild(description);
+        const linksResponse = await httpGet({
+            url: `${getConfiguration('path')['data']}/social.json`,
+            parameters: {}
+        });
+        const links = await linksResponse.json();
+        for (const name in links) {
+            const socialButton = uiComponent({
+                type: Html.A,
+                text: name,
+                attributes: {
+                    href: links[name],
+                    target: '_blank'
+                },
+                styles: {
+                    marginTop: '1rem',
+                    fontSize: '1.5rem'
+                }
+            });
+            view.appendChild(socialButton);
+        }
+        container.appendChild(view);
+    }
 
     /**
      * When the dynamic URL changes loads
      * the correspoding view from the URL
      */
-    window.addEventListener("hashchange", start);
+    window.addEventListener('hashchange', start);
     /**
      * When the window is loaded load
      * the app state to show
      */
     window.onload = async function () {
-        await loadConfiguration("gtdf.config.json");
+        await loadConfiguration('gtdf.config.json');
         Display.checkType();
-        await loadIcons("material", `${getConfiguration("path")["icons"]}/materialicons.json`);
-        await loadIcons("social", `${getConfiguration("path")["icons"]}/socialicons.json`);
-        await ImageService.load();
+        await loadIcons('material', `${getConfiguration('path')['icons']}/materialicons.json`);
+        await loadIcons('social', `${getConfiguration('path')['icons']}/socialicons.json`);
         await start();
     };
     window.onresize = async function () {
@@ -1131,8 +648,8 @@
     };
     /** Start the web app     */
     async function start() {
-        setRoute("", HomeView.show);
-        setRoute("bio", BioView.show);
+        setRoute('', showSummaryView);
+        // setRoute("/stickers", showStickerView);
         setNotFoundRoute(showErrorView);
         showRoute(window.location.hash.slice(1).toLowerCase(), document.body);
     }
