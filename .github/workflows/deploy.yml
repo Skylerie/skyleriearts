@@ -1,48 +1,48 @@
 name: Stable release
 on:
   push:
-    branches: [ main, feature/gtd-v2, test/ci ]
+    branches: [main, feature/gtd-v2, val_adventures]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: '20'
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
 
-    - name: Install node dependencies
-      run: npm install -g rollup && npm install -g typescript
- 
-    - name: Transpile typescript
-      run: tsc
-    
-    - name: Show directories
-      run: ls -lha temp
+      - name: Install node dependencies
+        run: npm install -g rollup && npm install -g typescript
 
-    - name: Minify the js ha
-      run: rollup ./temp/src/start.js --file ./out/start.js --format iife
+      - name: Transpile typescript
+        run: tsc
 
-    - name: Minify the css
-      run: ./bin/lit -f styles.env
+      - name: Show directories
+        run: ls -lha temp
 
-    - name: Remove innecesary files and directories
-      run: rm -rf .gitignore temp styles/src src bin environment.js styles.env tsconfig.json .github 
-  
-    - name: Create directories
-      run: mkdir -p styles/src temp/src/
+      - name: Minify the js ha
+        run: rollup ./temp/src/start.js --file ./out/start.js --format iife
 
-    - name: Move javascript
-      run: mv out/start.js temp/src/start.js 
+      - name: Minify the css
+        run: ./bin/lit -f styles.env
 
-    - name: Move css
-      run: mv styles/out/master.css styles/src/master.css
+      - name: Remove innecesary files and directories
+        run: rm -rf .gitignore temp styles/src src bin environment.js styles.env tsconfig.json .github
 
-    - name: Check the output
-      run: ls -lha .
+      - name: Create directories
+        run: mkdir -p styles/src temp/src/
 
-    - name: Deploy 🚀
-      uses: JamesIves/github-pages-deploy-action@v4.3.0
-      with:
-        branch: gh-pages # The branch the action should deploy to.
-        folder: . # The folder the action should deploy.
+      - name: Move javascript
+        run: mv out/start.js temp/src/start.js
+
+      - name: Move css
+        run: mv styles/out/master.css styles/src/master.css
+
+      - name: Check the output
+        run: ls -lha .
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4.3.0
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: . # The folder the action should deploy.
