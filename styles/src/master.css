@@ -2,11 +2,6 @@
 @import url('./components/_import.css');
 @import url('./views/_import.css');
 
-@font-face {
-  font-family: 'Strawberry Crumble';
-  src: url('../../resources/fonts/Strawberry\ Crumble.otf');
-}
-
 :root {
   --background: #d6bed7;
 
