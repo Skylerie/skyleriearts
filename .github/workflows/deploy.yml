@@ -1,7 +1,7 @@
 name: Stable release
 on:
   push:
-    branches: [main, feature/gtd-v2, val_adventures]
+    branches: [main, val_adventures]
 jobs:
   build:
     runs-on: ubuntu-latest
