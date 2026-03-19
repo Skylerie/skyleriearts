@@ -1,0 +1,88 @@
+view#summary {
+  margin-top: 10rem;
+}
+
+:root[data-display="mobile"] view#summary {
+  margin-top: 0rem;
+}
+
+:root[data-display="mobile"] view#summary {
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+view#summary img#logo {
+  width: 20rem;
+}
+
+:root[data-display="mobile"] view#summary img#logo {
+  width: 15rem;
+}
+
+view#summary text#subtitle {
+  margin-top: 2rem;
+  color: #a870c3;
+  font-size: 1rem;
+}
+
+view#summary text#description {
+  margin-top: 2rem;
+  color: #a870c3;
+  font-size: 2rem;
+  text-decoration: underline;
+}
+
+view#summary a.social-button {
+  --size: 3.1rem;
+  display: flex;
+  font-size: 1.5rem;
+  margin: 0.3rem 0.3rem;
+  border-radius: calc(var(--size) * 0.3);
+  width: var(--size);
+  height: var(--size);
+  padding: calc(var(--size) / 4.5);
+  background: #b05abc45;
+}
+
+view#summary a.social-button svg {
+  width: 100%;
+  height: 100%;
+  fill: #eedaec;
+}
+
+view#summary div#merch-banner {
+  height: 6rem;
+  padding: 1rem 1.7rem;
+  border-radius: 1.5rem;
+  margin: 1rem 0;
+  color: #a870c3;
+  background: #eedaec;
+  font-family: system-ui;
+  cursor: pointer;
+  transition: box-shadow 0.15s;
+  box-shadow: 0rem 0.35rem 0.1rem rgba(0, 0, 0, 0.04);
+}
+
+view#summary div#merch-banner:hover {
+  box-shadow: 0rem 0.35rem 0.1rem rgba(0, 0, 0, 0);
+}
+
+view#summary div#merch-banner svg {
+  --size: 2.5rem;
+  fill: #a870c3;
+  color: #a870c3;
+  width: var(--size);
+  height: var(--size);
+  margin-left: 3rem;
+}
+
+view#summary div#merch-banner p#merch-text {
+  font-size: 1.3rem;
+  margin-bottom: 0.3rem;
+}
+
+view#summary div#merch-banner p#merch-text-2 {
+  font-size: 0.85rem;
+}
