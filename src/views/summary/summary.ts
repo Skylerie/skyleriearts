@@ -13,7 +13,8 @@ export async function showSummaryView(_: string[], container: HTMLElement) {
 
   await Templates.load("/views/summary.html", view);
   const logo = document.getElementById("logo") as HTMLImageElement;
-  logo.addEventListener("load", () => {
-    view.classList.remove("hidden");
-  });
+  logo.addEventListener("load", () => view.classList.remove("hidden"));
+
+  const merchBanner = document.getElementById("merch-banner") as HTMLImageElement;
+  merchBanner.onclick = () => window.open("https://skyleriearts.etsy.com", "_blank");
 }
