@@ -574,6 +574,32 @@
         }
     }
 
+    class Templates {
+        /**
+         * Load the content of a given template
+         * @param path the template path
+         * @returns the template contents
+         */
+        static async getHTML(path) {
+            try {
+                let error;
+                const request = fetch(path);
+                request.catch((err) => (error = err));
+                const response = await request;
+                if (error) {
+                    return undefined;
+                }
+                return await response.text();
+            }
+            catch (e) {
+                return undefined;
+            }
+        }
+        static async load(path, container) {
+            container.innerHTML = await Templates.getHTML(path);
+        }
+    }
+
     async function showSummaryView(_, container) {
         const view = uiComponent({
             type: Html.View,
@@ -581,69 +607,31 @@
             classes: [BubbleUI.BoxColumn, BubbleUI.BoxCenter]
         });
         container.appendChild(view);
-        const title = uiComponent({
-            type: Html.Img,
-            id: "logo",
-            attributes: {
-                src: `${getConfiguration("path")["images"]}/skyleriearts-logo.png`
-            }
-        });
-        view.appendChild(title);
-        const comment = uiComponent({
-            type: Html.Text,
-            id: "subtitle",
-            text: "We are rebuilding this website!"
-        });
-        view.appendChild(comment);
-        const merchBanner = uiComponent({
-            id: "merch-banner",
-            classes: [BubbleUI.BoxRow, BubbleUI.BoxCenter]
-        });
-        view.appendChild(merchBanner);
-        merchBanner.onclick = () => {
-            window.open("https://skyleriearts.etsy.com", "_blank");
-        };
-        const merchTextColumn = uiComponent({});
-        merchBanner.appendChild(merchTextColumn);
-        const merchText = uiComponent({
-            type: Html.P,
-            id: "merch-text",
-            text: "New merch available!"
-        });
-        merchTextColumn.appendChild(merchText);
-        const merchText2 = uiComponent({
-            type: Html.P,
-            id: "merch-text-2",
-            text: "Click here to visit the store."
-        });
-        merchTextColumn.appendChild(merchText2);
-        const merchIcon = uiComponent({
-            type: Html.Div
-        });
-        merchBanner.appendChild(merchIcon);
+        await Templates.load("/views/summary.html", view);
         const linksResponse = await httpGet({
             url: `${getConfiguration("path")["data"]}/social.json`,
             parameters: {}
         });
         const links = await linksResponse.json();
-        const linkContainer = uiComponent({
-            classes: [BubbleUI.BoxRow]
-        });
+        const linkContainer = uiComponent({ classes: [BubbleUI.BoxRow] });
         for (const name in links) {
             const socialButton = uiComponent({
                 type: Html.A,
-                text: name,
-                classes: ["social-button"],
+                text: "",
+                classes: ["social-button", "hidden"],
                 attributes: {
                     href: links[name],
                     target: "_blank"
                 }
             });
             linkContainer.appendChild(socialButton);
-            Icons.load(`/resources/icons/${name}.svg`, (content) => (socialButton.innerHTML = content));
+            Icons.load(`/resources/icons/${name}.svg`, (content) => show(socialButton, content));
         }
         view.appendChild(linkContainer);
-        Icons.load("/resources/icons/shopping_bag.svg", (content) => (merchIcon.innerHTML = content));
+    }
+    function show(container, content) {
+        container.innerHTML = content;
+        container.classList.remove("hidden");
     }
 
     /**
