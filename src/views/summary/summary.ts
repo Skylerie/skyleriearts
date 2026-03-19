@@ -7,7 +7,8 @@ export async function showSummaryView(_: string[], container: HTMLElement) {
   const view = uiComponent({
     type: Html.View,
     id: "summary",
-    classes: [BubbleUI.BoxColumn, BubbleUI.BoxCenter, "hidden"]
+    classes: [BubbleUI.BoxColumn, BubbleUI.BoxCenter, "hidden"],
+    selectable: false
   });
   container.appendChild(view);
 
