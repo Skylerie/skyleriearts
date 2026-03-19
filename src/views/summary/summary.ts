@@ -11,7 +11,9 @@ export async function showSummaryView(_: string[], container: HTMLElement) {
   });
   container.appendChild(view);
 
-  Templates.load("/views/summary.html", view);
-  const logo = document.getElementById("#logo");
-  logo.onload = () => view.classList.remove("hidden");
+  await Templates.load("/views/summary.html", view);
+  const logo = document.getElementById("logo") as HTMLImageElement;
+  logo.addEventListener("load", () => {
+    view.classList.remove("hidden");
+  });
 }
