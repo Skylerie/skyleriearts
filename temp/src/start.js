@@ -631,7 +631,9 @@
     }
     function show(container, content) {
         container.innerHTML = content;
-        container.classList.remove("hidden");
+        setTimeout(() => {
+            container.classList.remove("hidden");
+        }, 250);
     }
 
     /**
