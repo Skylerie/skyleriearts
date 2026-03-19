@@ -42,5 +42,7 @@ export async function showSummaryView(_: string[], container: HTMLElement) {
 
 function show(container: HTMLElement, content: string): void {
   container.innerHTML = content;
-  container.classList.remove("hidden");
+  setTimeout(() => {
+    container.classList.remove("hidden");
+  }, 250);
 }
