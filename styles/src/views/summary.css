@@ -44,6 +44,12 @@ view#summary a.social-button {
   height: var(--size);
   padding: calc(var(--size) / 4.5);
   background: #b05abc45;
+  opacity: 1;
+  transition: opacity 0.25s;
+}
+
+view#summary a.social-button.hidden {
+  opacity: 0;
 }
 
 view#summary a.social-button svg {
