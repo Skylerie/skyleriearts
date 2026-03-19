@@ -422,9 +422,9 @@
         container.appendChild(view);
         await Templates.load("/views/summary.html", view);
         const logo = document.getElementById("logo");
-        logo.addEventListener("load", () => {
-            view.classList.remove("hidden");
-        });
+        logo.addEventListener("load", () => view.classList.remove("hidden"));
+        const merchBanner = document.getElementById("merch-banner");
+        merchBanner.onclick = () => window.open("https://skyleriearts.etsy.com", "_blank");
     }
 
     /**
